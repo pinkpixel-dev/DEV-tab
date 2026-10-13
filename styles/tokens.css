@@ -1,0 +1,35 @@
+:root {
+  color-scheme: dark;
+
+  --font-sans: 'Geist Variable', 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+
+  --bg: oklch(0.19 0.006 265);
+  --bg-dots: oklch(0.26 0.006 265);
+  --surface: oklch(0.225 0.006 265);
+  --surface-hover: oklch(0.255 0.007 265);
+  --surface-raised: oklch(0.28 0.008 265);
+  --border: oklch(0.31 0.008 265);
+  --border-strong: oklch(0.42 0.01 265);
+
+  --text: oklch(0.97 0.003 265);
+  --text-muted: oklch(0.72 0.01 265);
+  --text-faint: oklch(0.56 0.01 265);
+
+  --accent: oklch(0.83 0.13 78);
+  --accent-text: oklch(0.22 0.03 78);
+  --danger: oklch(0.7 0.16 25);
+  --success: oklch(0.78 0.13 155);
+
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-pill: 999px;
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 120ms;
+  --dur: 180ms;
+
+  --card-min: 300px;
+}

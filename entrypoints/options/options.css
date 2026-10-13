@@ -1,0 +1,128 @@
+.options {
+  max-width: 880px;
+  padding: 40px 28px 56px;
+}
+
+.options-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.options-head h1 {
+  font-size: 24px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--success);
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease-out);
+}
+
+.saved[data-visible='true'] {
+  opacity: 1;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+  gap: 12px 40px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.row-label h2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.row-label p {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.select,
+.text-input {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.select {
+  min-width: 200px;
+  cursor: pointer;
+}
+
+.text-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.select:hover,
+.text-input:hover {
+  border-color: var(--border-strong);
+}
+
+.text-input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.segment {
+  height: 30px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.segment:hover {
+  color: var(--text);
+}
+
+.segment[aria-checked='true'] {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.options-foot {
+  margin-top: 28px;
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.options-foot a {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.options-foot a:hover {
+  color: var(--text);
+}

@@ -1,0 +1,96 @@
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.chip:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.chip[aria-pressed='true'] {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+}
+
+.chip-extra[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.chip-static {
+  cursor: default;
+  padding-right: 4px;
+}
+
+.chip-static:hover {
+  color: var(--text-muted);
+}
+
+.chip-remove {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.chip-remove:hover {
+  background: var(--surface-raised);
+  color: var(--danger);
+}
+
+.tag-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tag-editor-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag-editor-empty,
+.tag-editor-hint {
+  color: var(--text-faint);
+  font-size: 14px;
+}
+
+.tag-editor-form {
+  display: flex;
+  gap: 8px;
+  max-width: 360px;
+}
