@@ -126,3 +126,19 @@
 .options-foot a:hover {
   color: var(--text);
 }
+
+.row-note {
+  margin-top: 10px;
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.row-note a {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.row-note a:hover {
+  color: var(--text);
+}

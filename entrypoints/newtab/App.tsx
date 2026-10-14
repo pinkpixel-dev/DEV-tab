@@ -1,25 +1,28 @@
 import { useMemo, useRef, useState } from 'react';
 import { CloudOff, Inbox, RefreshCw, SearchX, Settings as SettingsIcon, TriangleAlert } from 'lucide-react';
+import { UserBadge } from '@/components/account/UserBadge';
 import { FeedGrid } from '@/components/feed/FeedGrid';
 import { FeedTabs } from '@/components/feed/FeedTabs';
 import { LoadMore } from '@/components/feed/LoadMore';
 import { SearchBox } from '@/components/search/SearchBox';
 import { TagFilter } from '@/components/tags/TagFilter';
 import { Banner, StatusMessage } from '@/components/ui/StatusMessage';
+import { useAccount } from '@/hooks/useAccount';
 import { useFeed, type FeedSource } from '@/hooks/useFeed';
 import { useKeyboardNav } from '@/hooks/useKeyboardNav';
 import { useSettings } from '@/hooks/useSettings';
 import type { ApiError } from '@/lib/api/client';
-import type { FeedKind } from '@/lib/api/types';
+import type { Account, FeedKind } from '@/lib/api/types';
 import { APP_NAME } from '@/lib/app-info';
 import { timeAgo } from '@/lib/format';
 import type { Settings } from '@/lib/settings';
 
 export default function App() {
   const { settings } = useSettings();
+  const { account } = useAccount();
   // Wait for settings so the first fetch uses the right default feed.
   if (!settings) return null;
-  return <FeedPage settings={settings} />;
+  return <FeedPage settings={settings} account={account} />;
 }
 
 function staleMessage(error: ApiError, cachedAt: number | null): string {
@@ -29,7 +32,7 @@ function staleMessage(error: ApiError, cachedAt: number | null): string {
   return `Couldn't refresh. These are saved posts${age}.`;
 }
 
-function FeedPage({ settings }: { settings: Settings }) {
+function FeedPage({ settings, account }: { settings: Settings; account: Account | null }) {
   const [kind, setKind] = useState<FeedKind>(settings.defaultFeed);
   const [tag, setTag] = useState<string | null>(null);
   const [query, setQuery] = useState<string | null>(null);
@@ -83,6 +86,7 @@ function FeedPage({ settings }: { settings: Settings }) {
           >
             <SettingsIcon size={16} aria-hidden="true" />
           </button>
+          {account && <UserBadge account={account} />}
         </div>
       </header>
 

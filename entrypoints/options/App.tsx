@@ -1,7 +1,10 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Check } from 'lucide-react';
+import { KeyForm } from '@/components/account/KeyForm';
+import { ShapeDebug } from '@/components/account/ShapeDebug';
 import { FEED_LABELS } from '@/components/feed/FeedTabs';
 import { TagListEditor } from '@/components/tags/TagListEditor';
+import { useAccount } from '@/hooks/useAccount';
 import { useSettings } from '@/hooks/useSettings';
 import type { FeedKind } from '@/lib/api/types';
 import { APP_NAME, APP_VERSION } from '@/lib/app-info';
@@ -26,6 +29,7 @@ function Row({ title, hint, children }: { title: string; hint?: string; children
 
 export default function App() {
   const { settings, update } = useSettings();
+  const { apiKey, account, ready } = useAccount();
   const [savedAt, setSavedAt] = useState<number | null>(null);
 
   useEffect(() => {
@@ -34,7 +38,7 @@ export default function App() {
     return () => clearTimeout(t);
   }, [savedAt]);
 
-  if (!settings) return null;
+  if (!settings || !ready) return null;
 
   async function save(patch: Partial<Settings>) {
     await update(patch);
@@ -99,6 +103,20 @@ export default function App() {
           onChange={(hiddenTags) => save({ hiddenTags })}
           emptyText="Nothing hidden."
         />
+      </Row>
+
+      <Row title="DEV account" hint="Optional. Adds your followed tags, reading list and likes.">
+        <KeyForm account={account} />
+        {!account && (
+          <p className="row-note">
+            Create a key under{' '}
+            <a href="https://dev.to/settings/extensions" target="_blank" rel="noreferrer">
+              DEV API Keys
+            </a>{' '}
+            in your DEV settings. It stays in this browser.
+          </p>
+        )}
+        {import.meta.env.DEV && apiKey && <ShapeDebug apiKey={apiKey} />}
       </Row>
 
       <footer className="options-foot">

@@ -1,0 +1,90 @@
+.key-form {
+  display: flex;
+  gap: 8px;
+  max-width: 520px;
+}
+
+.key-error {
+  margin-top: 8px;
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.account-connected {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.account-avatar {
+  flex: none;
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+}
+
+.account-who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-right: auto;
+}
+
+.account-name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-who a {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.account-who a:hover {
+  color: var(--text);
+}
+
+.user-badge {
+  display: inline-flex;
+  flex: none;
+  border-radius: var(--radius-pill);
+}
+
+.user-badge img {
+  display: block;
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+}
+
+.user-badge:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.shape-debug {
+  margin-top: 16px;
+}
+
+.shape-debug pre {
+  max-height: 480px;
+  margin-top: 12px;
+  padding: 12px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.user-badge-initial {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  font-size: 13px;
+  font-weight: 600;
+}

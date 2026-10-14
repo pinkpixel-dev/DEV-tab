@@ -36,3 +36,11 @@ export interface FeedQuery {
   page: number;
   tag?: string;
 }
+
+// The signed-in DEV user, trimmed to what the UI shows.
+export interface Account {
+  id: number;
+  username: string;
+  name: string;
+  image: string;
+}
