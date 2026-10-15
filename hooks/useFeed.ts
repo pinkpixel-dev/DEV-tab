@@ -5,12 +5,17 @@ import type { Article, FeedKind } from '@/lib/api/types';
 import { readCache, writeCache } from '@/lib/cache';
 import { fetchReadingList } from '@/lib/api/user';
 import { getFollowedTags } from '@/lib/follows';
+import { fetchOrgArticles, fetchOrgsFeed } from '@/lib/api/orgs';
+import { fetchTrendArticles } from '@/lib/api/trends';
 
 export type FeedSource =
   | { type: 'feed'; kind: FeedKind; tag?: string }
   | { type: 'mine'; apiKey: string }
   | { type: 'reading'; apiKey: string }
-  | { type: 'search'; q: string };
+  | { type: 'search'; q: string }
+  | { type: 'orgs'; usernames: string[] }
+  | { type: 'org'; username: string }
+  | { type: 'trend'; slug: string };
 
 type Status = 'loading' | 'ready' | 'error';
 
@@ -19,6 +24,9 @@ function sourceKey(source: FeedSource): string {
   if (source.type === 'feed') return `feed:${source.kind}:${source.tag ?? ''}`;
   if (source.type === 'mine') return 'me:feed';
   if (source.type === 'reading') return 'me:reading';
+  if (source.type === 'orgs') return `orgs:${source.usernames.join(',')}`;
+  if (source.type === 'org') return `org:${source.username}`;
+  if (source.type === 'trend') return `trend:${source.slug}`;
   return `search:${source.q}`;
 }
 
@@ -26,12 +34,16 @@ async function load(source: FeedSource, page: number, signal: AbortSignal) {
   if (source.type === 'feed') return fetchFeed({ kind: source.kind, tag: source.tag, page }, signal);
   if (source.type === 'search') return searchArticles(source.q, page, signal);
   if (source.type === 'reading') return fetchReadingList(source.apiKey, page, signal);
+  if (source.type === 'orgs') return fetchOrgsFeed(source.usernames, signal);
+  if (source.type === 'org') return fetchOrgArticles(source.username, page, signal);
+  if (source.type === 'trend') return fetchTrendArticles(source.slug, page, signal);
   const tags = await getFollowedTags(source.apiKey);
   return fetchMyFeed(tags.slice(0, MY_FEED_TAGS).map((t) => t.name), signal);
 }
 
-// My feed is already a merge of several requests, so it has no next page.
-const pages = (source: FeedSource, data: Article[]) => source.type !== 'mine' && data.length >= PER_PAGE;
+// My feed and the all-orgs feed are already merges of several requests, so they have no next page.
+const pages = (source: FeedSource, data: Article[]) =>
+  source.type !== 'mine' && source.type !== 'orgs' && data.length >= PER_PAGE;
 
 function toApiError(err: unknown): ApiError {
   return err instanceof ApiError ? err : new ApiError('http', 'Something went wrong loading posts.');
@@ -39,7 +51,9 @@ function toApiError(err: unknown): ApiError {
 
 const isAbort = (err: unknown) => err instanceof DOMException && err.name === 'AbortError';
 
-export function useFeed(source: FeedSource, hiddenTags: string[]) {
+// A null source loads nothing, for views that aren't ready to pick one yet
+// (no orgs saved, trends still loading) or don't show posts at all (events).
+export function useFeed(source: FeedSource | null, hiddenTags: string[]) {
   const [articles, setArticles] = useState<Article[]>([]);
   const [status, setStatus] = useState<Status>('loading');
   const [error, setError] = useState<ApiError | null>(null);
@@ -53,7 +67,7 @@ export function useFeed(source: FeedSource, hiddenTags: string[]) {
   const [reloadToken, setReloadToken] = useState(0);
   const controller = useRef<AbortController | null>(null);
 
-  const key = sourceKey(source);
+  const key = source ? sourceKey(source) : '';
 
   useEffect(() => {
     controller.current?.abort();
@@ -66,6 +80,14 @@ export function useFeed(source: FeedSource, hiddenTags: string[]) {
     setMoreError(null);
     setLoadingMore(false);
     setPage(1);
+
+    if (!source) {
+      setArticles([]);
+      setCachedAt(null);
+      setHasMore(false);
+      setStatus('loading');
+      return;
+    }
 
     (async () => {
       let shown = false;
@@ -109,7 +131,7 @@ export function useFeed(source: FeedSource, hiddenTags: string[]) {
   }, [key, reloadToken]);
 
   const loadMore = useCallback(async () => {
-    if (loadingMore || !hasMore) return;
+    if (loadingMore || !hasMore || !source) return;
     const ctrl = controller.current;
     if (!ctrl) return;
     setLoadingMore(true);

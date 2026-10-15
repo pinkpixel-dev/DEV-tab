@@ -1,0 +1,8 @@
+.event-card .card-meta svg {
+  flex: none;
+}
+
+.event-card[data-status='live'] .event-status {
+  color: var(--accent);
+  font-weight: 600;
+}

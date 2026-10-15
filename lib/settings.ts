@@ -1,5 +1,5 @@
 import { storage } from 'wxt/utils/storage';
-import type { FeedTab } from './api/types';
+import type { FeedTab, Organization } from './api/types';
 
 export type Density = 'comfortable' | 'compact';
 
@@ -9,6 +9,8 @@ export interface Settings {
   density: Density;
   savedTags: string[];
   hiddenTags: string[];
+  // Orgs shown on the Orgs tab. DEV's API can't list the orgs you follow, so they're picked here.
+  orgs: Organization[];
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -16,6 +18,7 @@ export const DEFAULT_SETTINGS: Settings = {
   density: 'comfortable',
   savedTags: ['webdev', 'javascript', 'programming', 'ai', 'beginners'],
   hiddenTags: [],
+  orgs: [],
 };
 
 export const settingsItem = storage.defineItem<Settings>('local:settings', {

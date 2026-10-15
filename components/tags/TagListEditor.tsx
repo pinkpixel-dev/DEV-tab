@@ -8,11 +8,14 @@ interface Props {
   tags: string[];
   onChange: (tags: string[]) => void;
   emptyText: string;
+  // Popular DEV tags, offered as autocomplete while typing.
+  suggestions?: string[];
 }
 
-export function TagListEditor({ label, tags, onChange, emptyText }: Props) {
+export function TagListEditor({ label, tags, onChange, emptyText, suggestions }: Props) {
   const [draft, setDraft] = useState('');
   const inputId = useId();
+  const listId = useId();
   const normalized = normalizeTag(draft);
   const duplicate = normalized !== '' && tags.includes(normalized);
 
@@ -57,7 +60,16 @@ export function TagListEditor({ label, tags, onChange, emptyText }: Props) {
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           aria-invalid={duplicate || undefined}
+          list={suggestions ? listId : undefined}
+          autoComplete="off"
         />
+        {suggestions && (
+          <datalist id={listId}>
+            {suggestions.map((t) => (
+              <option key={t} value={t} />
+            ))}
+          </datalist>
+        )}
         <button type="submit" className="btn" disabled={!normalized || duplicate}>
           <Plus size={15} aria-hidden="true" />
           Add

@@ -2,11 +2,14 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { ArrowLeft, Check } from 'lucide-react';
 import { KeyForm } from '@/components/account/KeyForm';
 import { ShapeDebug } from '@/components/account/ShapeDebug';
-import { FEED_LABELS, PERSONAL_LABELS } from '@/components/feed/FeedTabs';
+import { EXTRA_LABELS, FEED_LABELS, PERSONAL_LABELS } from '@/components/feed/FeedTabs';
+import { OrgListEditor } from '@/components/orgs/OrgListEditor';
 import { TagListEditor } from '@/components/tags/TagListEditor';
 import { useAccount } from '@/hooks/useAccount';
+import { useCachedData } from '@/hooks/useCachedData';
 import { useSettings } from '@/hooks/useSettings';
-import type { FeedKind, FeedTab, PersonalTab } from '@/lib/api/types';
+import { fetchPopularTags } from '@/lib/api/tags';
+import type { ExtraTab, FeedKind, FeedTab, PersonalTab } from '@/lib/api/types';
 import { APP_NAME, APP_VERSION } from '@/lib/app-info';
 import type { Density, Settings } from '@/lib/settings';
 
@@ -31,6 +34,8 @@ export default function App() {
   const { settings, update } = useSettings();
   const { apiKey, account, ready } = useAccount();
   const [savedAt, setSavedAt] = useState<number | null>(null);
+  // Autocomplete for the tag lists. They still work as plain inputs if this fails.
+  const popularTags = useCachedData('tags:popular', fetchPopularTags).data ?? undefined;
 
   useEffect(() => {
     if (!savedAt) return;
@@ -77,6 +82,11 @@ export default function App() {
               {FEED_LABELS[kind]}
             </option>
           ))}
+          {(Object.keys(EXTRA_LABELS) as ExtraTab[]).map((tab) => (
+            <option key={tab} value={tab}>
+              {EXTRA_LABELS[tab]}
+            </option>
+          ))}
         </select>
       </Row>
 
@@ -106,6 +116,7 @@ export default function App() {
           tags={settings.savedTags}
           onChange={(savedTags) => save({ savedTags })}
           emptyText="No tags yet."
+          suggestions={popularTags}
         />
       </Row>
 
@@ -115,7 +126,12 @@ export default function App() {
           tags={settings.hiddenTags}
           onChange={(hiddenTags) => save({ hiddenTags })}
           emptyText="Nothing hidden."
+          suggestions={popularTags}
         />
+      </Row>
+
+      <Row title="Orgs" hint="Their posts show up on the Orgs tab.">
+        <OrgListEditor orgs={settings.orgs} onChange={(orgs) => save({ orgs })} />
       </Row>
 
       <Row title="DEV account" hint="Optional. Adds your followed tags, reading list and a stats dashboard.">

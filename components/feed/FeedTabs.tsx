@@ -1,4 +1,4 @@
-import type { FeedKind, FeedTab, PersonalTab } from '@/lib/api/types';
+import type { ExtraTab, FeedKind, FeedTab, PersonalTab } from '@/lib/api/types';
 
 export const FEED_LABELS: Record<FeedKind, string> = {
   'top-day': 'Today',
@@ -12,6 +12,13 @@ export const PERSONAL_LABELS: Record<PersonalTab, string> = {
   reading: 'Reading list',
 };
 
+// Listed in tab order. Orgs goes last.
+export const EXTRA_LABELS: Record<ExtraTab, string> = {
+  trends: 'Trends',
+  events: 'Events',
+  orgs: 'Orgs',
+};
+
 interface Props {
   active: FeedTab | null;
   showMine: boolean;
@@ -22,6 +29,7 @@ export function FeedTabs({ active, showMine, onChange }: Props) {
   const tabs: [FeedTab, string][] = [
     ...(showMine ? (Object.entries(PERSONAL_LABELS) as [PersonalTab, string][]) : []),
     ...(Object.entries(FEED_LABELS) as [FeedKind, string][]),
+    ...(Object.entries(EXTRA_LABELS) as [ExtraTab, string][]),
   ];
 
   return (

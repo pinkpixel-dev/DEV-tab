@@ -14,6 +14,24 @@
 
 - Reading list tab when an API key is connected
 - New post button in the top bar that opens the DEV editor
+- Posts from an earlier year now show the year ("Oct 4, 2024") instead of just the month and day
+
+### 🏢 Orgs
+
+- Orgs tab with posts from DEV organizations you pick, newest first
+- Filter chips to see one org at a time, or all of them together
+- Add orgs in settings by username or by pasting any dev.to link to the org or one of its posts. Each one is checked against DEV before it's saved
+
+### 📈 Trends and events
+
+- Trends tab with DEV's current trends, a short description of each, and the posts in it
+- Events tab with live streams and challenges that are on now or coming up, filterable by type
+- Event cards show whether something is live or open now, when it starts, and link to the event on DEV
+
+### ⚙️ Settings
+
+- Tag fields suggest DEV's 1000 most popular tags as you type
+- Orgs, Trends and Events can be picked as the default feed
 
 ## 0.1.0 - October 11, 2026
 

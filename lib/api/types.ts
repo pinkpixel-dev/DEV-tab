@@ -52,9 +52,39 @@ export interface FollowedTag {
   points: number;
 }
 
-// A tab on the new tab page: one of the public feeds, or a personal tab
-// (My feed, Reading list) when a key is set.
+// A DEV organization, trimmed to what the chips and settings show.
+export interface Organization {
+  username: string;
+  name: string;
+  profile_image: string;
+}
+
+// From GET /trends. Trends are topics DEV groups related posts under.
+export interface Trend {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  articles_count: number;
+}
+
+// From GET /events: DEV live streams and challenges.
+export interface DevEvent {
+  id: number;
+  title: string;
+  description: string;
+  kind: 'live_stream' | 'challenge';
+  start: string;
+  end: string | null;
+  url: string;
+  cover: string | null;
+}
+
+// A tab on the new tab page: one of the public feeds, a personal tab
+// (My feed, Reading list) when a key is set, or one of the extra views.
 export type PersonalTab = 'mine' | 'reading';
-export type FeedTab = FeedKind | PersonalTab;
+export type ExtraTab = 'orgs' | 'trends' | 'events';
+export type FeedTab = FeedKind | PersonalTab | ExtraTab;
 
 export const isPersonalTab = (tab: FeedTab): tab is PersonalTab => tab === 'mine' || tab === 'reading';
+export const isExtraTab = (tab: FeedTab): tab is ExtraTab => tab === 'orgs' || tab === 'trends' || tab === 'events';

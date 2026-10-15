@@ -1,0 +1,39 @@
+.chip-group .chip {
+  max-width: 100%;
+}
+
+.chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip-avatar {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: var(--surface-raised);
+}
+
+.chip-link {
+  border-style: dashed;
+  text-decoration: none;
+}
+
+.subbar-note {
+  display: -webkit-box;
+  overflow: hidden;
+  max-width: 90ch;
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 14px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.subbar-note span {
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
