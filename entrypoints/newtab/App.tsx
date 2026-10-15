@@ -9,20 +9,22 @@ import { TagFilter } from '@/components/tags/TagFilter';
 import { Banner, StatusMessage } from '@/components/ui/StatusMessage';
 import { useAccount } from '@/hooks/useAccount';
 import { useFeed, type FeedSource } from '@/hooks/useFeed';
+import { useFollowedTags } from '@/hooks/useFollowedTags';
 import { useKeyboardNav } from '@/hooks/useKeyboardNav';
 import { useSettings } from '@/hooks/useSettings';
 import type { ApiError } from '@/lib/api/client';
-import type { Account, FeedKind } from '@/lib/api/types';
+import type { Account, FeedTab } from '@/lib/api/types';
 import { APP_NAME } from '@/lib/app-info';
 import { timeAgo } from '@/lib/format';
 import type { Settings } from '@/lib/settings';
 
 export default function App() {
   const { settings } = useSettings();
-  const { account } = useAccount();
-  // Wait for settings so the first fetch uses the right default feed.
-  if (!settings) return null;
-  return <FeedPage settings={settings} account={account} />;
+  const { apiKey, account, ready } = useAccount();
+  // Wait for settings and the key so the first fetch uses the right default feed.
+  if (!settings || !ready) return null;
+  // Key added or removed in another tab: remount so the tabs and default feed reset cleanly.
+  return <FeedPage key={apiKey ?? 'public'} settings={settings} apiKey={apiKey} account={account} />;
 }
 
 function staleMessage(error: ApiError, cachedAt: number | null): string {
@@ -32,17 +34,33 @@ function staleMessage(error: ApiError, cachedAt: number | null): string {
   return `Couldn't refresh. These are saved posts${age}.`;
 }
 
-function FeedPage({ settings, account }: { settings: Settings; account: Account | null }) {
-  const [kind, setKind] = useState<FeedKind>(settings.defaultFeed);
+interface FeedPageProps {
+  settings: Settings;
+  apiKey: string | null;
+  account: Account | null;
+}
+
+function FeedPage({ settings, apiKey, account }: FeedPageProps) {
+  const [kind, setKind] = useState<FeedTab>(
+    settings.defaultFeed === 'mine' && !apiKey ? 'top-day' : settings.defaultFeed,
+  );
   const [tag, setTag] = useState<string | null>(null);
   const [query, setQuery] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  const source = useMemo<FeedSource>(
-    () => (query ? { type: 'search', q: query } : { type: 'feed', kind, tag: tag ?? undefined }),
-    [query, kind, tag],
-  );
+  const followedTags = useFollowedTags(apiKey);
+  const chipTags = followedTags ?? settings.savedTags;
+
+  const source = useMemo<FeedSource>(() => {
+    if (query) return { type: 'search', q: query };
+    if (kind === 'mine' && apiKey) {
+      // A tag picked on My feed shows that tag's top posts this week, the same
+      // way My feed itself is built.
+      return tag ? { type: 'feed', kind: 'top-week', tag } : { type: 'mine', apiKey };
+    }
+    return { type: 'feed', kind: kind === 'mine' ? 'top-day' : kind, tag: tag ?? undefined };
+  }, [query, kind, tag, apiKey]);
   const feed = useFeed(source, settings.hiddenTags);
   useKeyboardNav(searchRef, gridRef);
 
@@ -52,7 +70,7 @@ function FeedPage({ settings, account }: { settings: Settings; account: Account 
     window.scrollTo({ top: 0 });
   }
 
-  function pickKind(next: FeedKind) {
+  function pickKind(next: FeedTab) {
     setQuery(null);
     setKind(next);
   }
@@ -64,7 +82,7 @@ function FeedPage({ settings, account }: { settings: Settings; account: Account 
           <img src="/icon/32.png" alt="" width={22} height={22} />
           <span>{APP_NAME}</span>
         </div>
-        <FeedTabs active={query ? null : kind} onChange={pickKind} />
+        <FeedTabs active={query ? null : kind} showMine={apiKey !== null} onChange={pickKind} />
         <div className="topbar-actions">
           <SearchBox ref={searchRef} active={query} onSearch={setQuery} onClear={() => setQuery(null)} />
           <button
@@ -96,7 +114,7 @@ function FeedPage({ settings, account }: { settings: Settings; account: Account 
             Results for <span>“{query}”</span>
           </h1>
         ) : (
-          <TagFilter savedTags={settings.savedTags} active={tag} onChange={pickTag} />
+          <TagFilter savedTags={chipTags} active={tag} onChange={pickTag} />
         )}
       </div>
 

@@ -22,6 +22,28 @@ WXT builds the extension, opens a separate Chrome window with it already install
 
 That Chrome window uses a throwaway profile, so it doesn't touch your normal browser. Settings you change there disappear when you close it.
 
+### If the window opens blank
+
+On this machine, the browser windows WXT opens don't work. Branded Google Chrome won't load the extension at all (you get `about:blank` and an "unsupported command-line flag" warning). Chromium and Firefox load it but draw a blank window, probably a GPU issue with their throwaway profiles.
+
+So dev mode here doesn't open a browser. The gitignored `web-ext.config.ts` turns that off:
+
+```ts
+import { defineWebExtConfig } from 'wxt';
+
+export default defineWebExtConfig({
+  disabled: true,
+});
+```
+
+Instead, load the dev build into your normal Chrome once:
+
+1. Run `npm run dev` and leave it running.
+2. Go to `chrome://extensions`, turn on **Developer mode** and click **Load unpacked**.
+3. Pick `.output/chrome-mv3-dev` (the `-dev` folder, not `chrome-mv3`).
+
+Live reload still works, because the dev build pulls its code from the dev server. The page only loads while `npm run dev` is running, so turn the extension off in `chrome://extensions` when you're done.
+
 For Firefox:
 
 ```bash

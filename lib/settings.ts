@@ -1,10 +1,11 @@
 import { storage } from 'wxt/utils/storage';
-import type { FeedKind } from './api/types';
+import type { FeedTab } from './api/types';
 
 export type Density = 'comfortable' | 'compact';
 
 export interface Settings {
-  defaultFeed: FeedKind;
+  // 'mine' only works with an API key. The new tab falls back to Today without one.
+  defaultFeed: FeedTab;
   density: Density;
   savedTags: string[];
   hiddenTags: string[];

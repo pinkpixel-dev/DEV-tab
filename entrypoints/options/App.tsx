@@ -1,12 +1,12 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Check } from 'lucide-react';
+import { ArrowLeft, Check } from 'lucide-react';
 import { KeyForm } from '@/components/account/KeyForm';
 import { ShapeDebug } from '@/components/account/ShapeDebug';
-import { FEED_LABELS } from '@/components/feed/FeedTabs';
+import { FEED_LABELS, MY_FEED_LABEL } from '@/components/feed/FeedTabs';
 import { TagListEditor } from '@/components/tags/TagListEditor';
 import { useAccount } from '@/hooks/useAccount';
 import { useSettings } from '@/hooks/useSettings';
-import type { FeedKind } from '@/lib/api/types';
+import type { FeedKind, FeedTab } from '@/lib/api/types';
 import { APP_NAME, APP_VERSION } from '@/lib/app-info';
 import type { Density, Settings } from '@/lib/settings';
 
@@ -48,6 +48,10 @@ export default function App() {
   return (
     <div className="options">
       <header className="options-head">
+        {/* Settings opens in its own tab with no history, so this links to the feed instead of going back. */}
+        <a className="btn icon-btn" href="/newtab.html" aria-label="Back to feed" title="Back to feed">
+          <ArrowLeft size={16} aria-hidden="true" />
+        </a>
         <h1>{APP_NAME} settings</h1>
         <span className="saved" role="status" data-visible={savedAt !== null}>
           <Check size={15} aria-hidden="true" />
@@ -59,9 +63,10 @@ export default function App() {
         <select
           className="select"
           value={settings.defaultFeed}
-          onChange={(e) => save({ defaultFeed: e.target.value as FeedKind })}
+          onChange={(e) => save({ defaultFeed: e.target.value as FeedTab })}
           aria-label="Default feed"
         >
+          {apiKey && <option value="mine">{MY_FEED_LABEL}</option>}
           {(Object.keys(FEED_LABELS) as FeedKind[]).map((kind) => (
             <option key={kind} value={kind}>
               {FEED_LABELS[kind]}
@@ -87,7 +92,10 @@ export default function App() {
         </div>
       </Row>
 
-      <Row title="Your tags" hint="Shown as quick filters above the feed.">
+      <Row
+        title="Your tags"
+        hint={apiKey ? 'Your followed DEV tags are used instead while a key is connected.' : 'Shown as quick filters above the feed.'}
+      >
         <TagListEditor
           label="Your tags"
           tags={settings.savedTags}

@@ -1,5 +1,5 @@
 import { apiGet } from './client';
-import type { Account } from './types';
+import type { Account, FollowedTag } from './types';
 
 // The spec's MyUser shape hasn't been checked against a live response yet,
 // so this only trusts the fields it needs and tolerates the image under
@@ -18,4 +18,13 @@ export function toAccount(raw: Record<string, unknown>): Account {
 export async function fetchMe(apiKey: string, signal?: AbortSignal): Promise<Account> {
   const raw = await apiGet<Record<string, unknown>>('/users/me', undefined, signal, apiKey);
   return toAccount(raw);
+}
+
+export function fetchFollowedTags(apiKey: string, signal?: AbortSignal): Promise<FollowedTag[]> {
+  return apiGet<FollowedTag[]>('/follows/tags', undefined, signal, apiKey);
+}
+
+// Heaviest tags first. Ties keep DEV's order.
+export function byWeight(tags: FollowedTag[]): FollowedTag[] {
+  return [...tags].sort((a, b) => b.points - a.points);
 }

@@ -44,3 +44,13 @@ export interface Account {
   name: string;
   image: string;
 }
+
+// From GET /follows/tags. `points` is the weight DEV gives each followed tag.
+export interface FollowedTag {
+  id: number;
+  name: string;
+  points: number;
+}
+
+// A tab on the new tab page: one of the public feeds, or My feed when a key is set.
+export type FeedTab = FeedKind | 'mine';

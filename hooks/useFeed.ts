@@ -1,22 +1,33 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { dedupe, fetchFeed, hideTagged, PER_PAGE, searchArticles } from '@/lib/api/articles';
+import { dedupe, fetchFeed, fetchMyFeed, hideTagged, MY_FEED_TAGS, PER_PAGE, searchArticles } from '@/lib/api/articles';
 import { ApiError } from '@/lib/api/client';
 import type { Article, FeedKind } from '@/lib/api/types';
 import { readCache, writeCache } from '@/lib/cache';
+import { getFollowedTags } from '@/lib/follows';
 
-export type FeedSource = { type: 'feed'; kind: FeedKind; tag?: string } | { type: 'search'; q: string };
+export type FeedSource =
+  | { type: 'feed'; kind: FeedKind; tag?: string }
+  | { type: 'mine'; apiKey: string }
+  | { type: 'search'; q: string };
 
 type Status = 'loading' | 'ready' | 'error';
 
+// Cache keys. My feed lives under `me:` so removing the API key clears it.
 function sourceKey(source: FeedSource): string {
-  return source.type === 'feed' ? `feed:${source.kind}:${source.tag ?? ''}` : `search:${source.q}`;
+  if (source.type === 'feed') return `feed:${source.kind}:${source.tag ?? ''}`;
+  if (source.type === 'mine') return 'me:feed';
+  return `search:${source.q}`;
 }
 
-function load(source: FeedSource, page: number, signal: AbortSignal) {
-  return source.type === 'feed'
-    ? fetchFeed({ kind: source.kind, tag: source.tag, page }, signal)
-    : searchArticles(source.q, page, signal);
+async function load(source: FeedSource, page: number, signal: AbortSignal) {
+  if (source.type === 'feed') return fetchFeed({ kind: source.kind, tag: source.tag, page }, signal);
+  if (source.type === 'search') return searchArticles(source.q, page, signal);
+  const tags = await getFollowedTags(source.apiKey);
+  return fetchMyFeed(tags.slice(0, MY_FEED_TAGS).map((t) => t.name), signal);
 }
+
+// My feed is already a merge of several requests, so it has no next page.
+const pages = (source: FeedSource, data: Article[]) => source.type !== 'mine' && data.length >= PER_PAGE;
 
 function toApiError(err: unknown): ApiError {
   return err instanceof ApiError ? err : new ApiError('http', 'Something went wrong loading posts.');
@@ -54,12 +65,12 @@ export function useFeed(source: FeedSource, hiddenTags: string[]) {
 
     (async () => {
       let shown = false;
-      if (source.type === 'feed') {
+      if (source.type !== 'search') {
         const hit = await readCache<Article[]>(key);
         if (ctrl.signal.aborted) return;
         if (hit) {
           setArticles(hit.data);
-          setHasMore(hit.data.length >= PER_PAGE);
+          setHasMore(pages(source, hit.data));
           setCachedAt(hit.at);
           setStatus('ready');
           shown = true;
@@ -75,10 +86,10 @@ export function useFeed(source: FeedSource, hiddenTags: string[]) {
         const data = await load(source, 1, ctrl.signal);
         if (ctrl.signal.aborted) return;
         setArticles(data);
-        setHasMore(data.length >= PER_PAGE);
+        setHasMore(pages(source, data));
         setCachedAt(null);
         setStatus('ready');
-        if (source.type === 'feed') await writeCache(key, data);
+        if (source.type !== 'search') await writeCache(key, data);
       } catch (err) {
         if (isAbort(err) || ctrl.signal.aborted) return;
         if (shown) setStaleError(toApiError(err));
