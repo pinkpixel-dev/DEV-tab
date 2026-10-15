@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+### 📊 Dashboard
+
+- New dashboard page for your own DEV stats, opened from the grid icon next to your avatar
+- Follower count, plus views, reactions, comments, new followers and read time for the last 7, 30 or 90 days
+- Daily views chart with per-day hover readouts
+- Your posts with views, reactions and comments, sortable by newest or most viewed, plus your drafts with edit links
+- Recent followers, top supporters, reaction breakdown and where your readers came from
+
+### 📰 Feed
+
+- Reading list tab when an API key is connected
+- New post button in the top bar that opens the DEV editor
+
 ## 0.1.0 - October 11, 2026
 
 ### 📰 Feed

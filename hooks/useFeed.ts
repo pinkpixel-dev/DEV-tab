@@ -3,25 +3,29 @@ import { dedupe, fetchFeed, fetchMyFeed, hideTagged, MY_FEED_TAGS, PER_PAGE, sea
 import { ApiError } from '@/lib/api/client';
 import type { Article, FeedKind } from '@/lib/api/types';
 import { readCache, writeCache } from '@/lib/cache';
+import { fetchReadingList } from '@/lib/api/user';
 import { getFollowedTags } from '@/lib/follows';
 
 export type FeedSource =
   | { type: 'feed'; kind: FeedKind; tag?: string }
   | { type: 'mine'; apiKey: string }
+  | { type: 'reading'; apiKey: string }
   | { type: 'search'; q: string };
 
 type Status = 'loading' | 'ready' | 'error';
 
-// Cache keys. My feed lives under `me:` so removing the API key clears it.
+// Cache keys. Personal feeds live under `me:` so removing the API key clears them.
 function sourceKey(source: FeedSource): string {
   if (source.type === 'feed') return `feed:${source.kind}:${source.tag ?? ''}`;
   if (source.type === 'mine') return 'me:feed';
+  if (source.type === 'reading') return 'me:reading';
   return `search:${source.q}`;
 }
 
 async function load(source: FeedSource, page: number, signal: AbortSignal) {
   if (source.type === 'feed') return fetchFeed({ kind: source.kind, tag: source.tag, page }, signal);
   if (source.type === 'search') return searchArticles(source.q, page, signal);
+  if (source.type === 'reading') return fetchReadingList(source.apiKey, page, signal);
   const tags = await getFollowedTags(source.apiKey);
   return fetchMyFeed(tags.slice(0, MY_FEED_TAGS).map((t) => t.name), signal);
 }

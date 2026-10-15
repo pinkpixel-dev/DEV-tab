@@ -14,6 +14,7 @@ I wanted something like daily.dev that only shows DEV, so I made it. It works in
 - Arrow keys move between cards and `Enter` opens one
 - **Compact** mode drops the cover images if you want more posts on screen
 - Caches the feed for 10 minutes, so new tabs open instantly and you still see posts when you're offline
+- **New post** button that takes you straight to the DEV editor
 
 Clicking a post opens it on dev.to. Commenting, bookmarking and reacting happen there for now.
 
@@ -61,9 +62,19 @@ Click the gear icon in the top right, or open the extension's options from your 
 
 Changes apply right away, including in tabs you already have open.
 
+## Your DEV account (optional)
+
+Everything above works without an account. If you add a DEV API key in settings, you also get:
+
+- **My feed**, built from the tags you follow on DEV
+- **Reading list**, the posts you've saved on DEV (view only, since the API can't save posts)
+- **Dashboard**, opened from the grid icon next to your avatar. It shows your follower count, views, reactions, comments and new followers for the last 7, 30 or 90 days, a daily views chart, your posts and drafts with edit links, recent followers, your top supporters and where your readers came from
+
+You can create a key under **DEV API Keys** at [dev.to/settings/extensions](https://dev.to/settings/extensions). It stays in this browser's extension storage and only gets sent to `dev.to`.
+
 ## Privacy
 
-DEV Tab only talks to `dev.to`. Settings and the cached feed live in your browser's extension storage, and nothing gets sent anywhere else.
+DEV Tab only talks to `dev.to`. Settings, your API key (if you add one) and cached data live in your browser's extension storage, and nothing gets sent anywhere else. Removing the key also clears everything that was cached for your account.
 
 ## Development
 
@@ -80,7 +91,7 @@ It's built with [WXT](https://wxt.dev), React and TypeScript. [DOCS/TESTING-AND-
 
 ## What's next
 
-Adding your own DEV API key (optional) to get a feed from the tags you follow, your reading list, reactions and stats on your own posts. [DOCS/ROADMAP.md](DOCS/ROADMAP.md) has the rest.
+Getting it into the Chrome Web Store and Firefox Add-ons. [DOCS/ROADMAP.md](DOCS/ROADMAP.md) has the rest.
 
 ## License
 

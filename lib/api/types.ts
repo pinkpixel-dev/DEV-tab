@@ -52,5 +52,9 @@ export interface FollowedTag {
   points: number;
 }
 
-// A tab on the new tab page: one of the public feeds, or My feed when a key is set.
-export type FeedTab = FeedKind | 'mine';
+// A tab on the new tab page: one of the public feeds, or a personal tab
+// (My feed, Reading list) when a key is set.
+export type PersonalTab = 'mine' | 'reading';
+export type FeedTab = FeedKind | PersonalTab;
+
+export const isPersonalTab = (tab: FeedTab): tab is PersonalTab => tab === 'mine' || tab === 'reading';

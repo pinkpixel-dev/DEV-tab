@@ -17,6 +17,8 @@
   --text-faint: oklch(0.56 0.01 265);
 
   --accent: oklch(0.83 0.13 78);
+  --accent-hover: oklch(0.88 0.12 78);
+  --accent-active: oklch(0.78 0.13 78);
   --accent-text: oklch(0.22 0.03 78);
   --danger: oklch(0.7 0.16 25);
   --success: oklch(0.78 0.13 155);

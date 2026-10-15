@@ -1,5 +1,7 @@
+import { PER_PAGE } from './articles';
 import { apiGet } from './client';
-import type { Account, FollowedTag } from './types';
+import { fromReadingList, type ReadingListItem } from './dashboard';
+import type { Account, Article, FollowedTag } from './types';
 
 // The spec's MyUser shape hasn't been checked against a live response yet,
 // so this only trusts the fields it needs and tolerates the image under
@@ -27,4 +29,9 @@ export function fetchFollowedTags(apiKey: string, signal?: AbortSignal): Promise
 // Heaviest tags first. Ties keep DEV's order.
 export function byWeight(tags: FollowedTag[]): FollowedTag[] {
   return [...tags].sort((a, b) => b.points - a.points);
+}
+
+export async function fetchReadingList(apiKey: string, page: number, signal?: AbortSignal): Promise<Article[]> {
+  const items = await apiGet<ReadingListItem[]>('/readinglist', { page, per_page: PER_PAGE }, signal, apiKey);
+  return fromReadingList(items);
 }

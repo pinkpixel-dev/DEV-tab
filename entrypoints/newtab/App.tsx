@@ -1,5 +1,15 @@
 import { useMemo, useRef, useState } from 'react';
-import { CloudOff, Inbox, RefreshCw, SearchX, Settings as SettingsIcon, TriangleAlert } from 'lucide-react';
+import {
+  Bookmark,
+  CloudOff,
+  Inbox,
+  LayoutDashboard,
+  RefreshCw,
+  SearchX,
+  Settings as SettingsIcon,
+  SquarePen,
+  TriangleAlert,
+} from 'lucide-react';
 import { UserBadge } from '@/components/account/UserBadge';
 import { FeedGrid } from '@/components/feed/FeedGrid';
 import { FeedTabs } from '@/components/feed/FeedTabs';
@@ -13,7 +23,7 @@ import { useFollowedTags } from '@/hooks/useFollowedTags';
 import { useKeyboardNav } from '@/hooks/useKeyboardNav';
 import { useSettings } from '@/hooks/useSettings';
 import type { ApiError } from '@/lib/api/client';
-import type { Account, FeedTab } from '@/lib/api/types';
+import { isPersonalTab, type Account, type FeedTab } from '@/lib/api/types';
 import { APP_NAME } from '@/lib/app-info';
 import { timeAgo } from '@/lib/format';
 import type { Settings } from '@/lib/settings';
@@ -42,7 +52,7 @@ interface FeedPageProps {
 
 function FeedPage({ settings, apiKey, account }: FeedPageProps) {
   const [kind, setKind] = useState<FeedTab>(
-    settings.defaultFeed === 'mine' && !apiKey ? 'top-day' : settings.defaultFeed,
+    isPersonalTab(settings.defaultFeed) && !apiKey ? 'top-day' : settings.defaultFeed,
   );
   const [tag, setTag] = useState<string | null>(null);
   const [query, setQuery] = useState<string | null>(null);
@@ -54,12 +64,13 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
 
   const source = useMemo<FeedSource>(() => {
     if (query) return { type: 'search', q: query };
-    if (kind === 'mine' && apiKey) {
-      // A tag picked on My feed shows that tag's top posts this week, the same
-      // way My feed itself is built.
-      return tag ? { type: 'feed', kind: 'top-week', tag } : { type: 'mine', apiKey };
+    if (isPersonalTab(kind)) {
+      // A tag picked on a personal tab shows that tag's top posts this week,
+      // the same way My feed itself is built.
+      if (tag || !apiKey) return { type: 'feed', kind: tag ? 'top-week' : 'top-day', tag: tag ?? undefined };
+      return { type: kind, apiKey };
     }
-    return { type: 'feed', kind: kind === 'mine' ? 'top-day' : kind, tag: tag ?? undefined };
+    return { type: 'feed', kind, tag: tag ?? undefined };
   }, [query, kind, tag, apiKey]);
   const feed = useFeed(source, settings.hiddenTags);
   useKeyboardNav(searchRef, gridRef);
@@ -84,6 +95,10 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
         </div>
         <FeedTabs active={query ? null : kind} showMine={apiKey !== null} onChange={pickKind} />
         <div className="topbar-actions">
+          <a className="btn btn-primary" href="https://dev.to/new" title="Write a new post on DEV">
+            <SquarePen size={16} aria-hidden="true" />
+            New post
+          </a>
           <SearchBox ref={searchRef} active={query} onSearch={setQuery} onClear={() => setQuery(null)} />
           <button
             type="button"
@@ -104,6 +119,11 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
           >
             <SettingsIcon size={16} aria-hidden="true" />
           </button>
+          {account && (
+            <a className="btn icon-btn" href="/dashboard.html" aria-label="Dashboard" title="Dashboard">
+              <LayoutDashboard size={16} aria-hidden="true" />
+            </a>
+          )}
           {account && <UserBadge account={account} />}
         </div>
       </header>
@@ -136,6 +156,8 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
         ) : feed.status === 'ready' && feed.articles.length === 0 ? (
           query ? (
             <StatusMessage icon={SearchX} title={`Nothing matched “${query}”`} detail="Try a different word or a tag." />
+          ) : source.type === 'reading' ? (
+            <StatusMessage icon={Bookmark} title="Your reading list is empty" detail="Save posts on DEV and they show up here." />
           ) : (
             <StatusMessage
               icon={Inbox}

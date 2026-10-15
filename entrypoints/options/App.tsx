@@ -2,11 +2,11 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { ArrowLeft, Check } from 'lucide-react';
 import { KeyForm } from '@/components/account/KeyForm';
 import { ShapeDebug } from '@/components/account/ShapeDebug';
-import { FEED_LABELS, MY_FEED_LABEL } from '@/components/feed/FeedTabs';
+import { FEED_LABELS, PERSONAL_LABELS } from '@/components/feed/FeedTabs';
 import { TagListEditor } from '@/components/tags/TagListEditor';
 import { useAccount } from '@/hooks/useAccount';
 import { useSettings } from '@/hooks/useSettings';
-import type { FeedKind, FeedTab } from '@/lib/api/types';
+import type { FeedKind, FeedTab, PersonalTab } from '@/lib/api/types';
 import { APP_NAME, APP_VERSION } from '@/lib/app-info';
 import type { Density, Settings } from '@/lib/settings';
 
@@ -66,7 +66,12 @@ export default function App() {
           onChange={(e) => save({ defaultFeed: e.target.value as FeedTab })}
           aria-label="Default feed"
         >
-          {apiKey && <option value="mine">{MY_FEED_LABEL}</option>}
+          {apiKey &&
+            (Object.keys(PERSONAL_LABELS) as PersonalTab[]).map((tab) => (
+              <option key={tab} value={tab}>
+                {PERSONAL_LABELS[tab]}
+              </option>
+            ))}
           {(Object.keys(FEED_LABELS) as FeedKind[]).map((kind) => (
             <option key={kind} value={kind}>
               {FEED_LABELS[kind]}
@@ -113,7 +118,7 @@ export default function App() {
         />
       </Row>
 
-      <Row title="DEV account" hint="Optional. Adds your followed tags, reading list and likes.">
+      <Row title="DEV account" hint="Optional. Adds your followed tags, reading list and a stats dashboard.">
         <KeyForm account={account} />
         {!account && (
           <p className="row-note">

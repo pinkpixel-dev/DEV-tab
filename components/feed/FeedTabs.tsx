@@ -1,4 +1,4 @@
-import type { FeedKind, FeedTab } from '@/lib/api/types';
+import type { FeedKind, FeedTab, PersonalTab } from '@/lib/api/types';
 
 export const FEED_LABELS: Record<FeedKind, string> = {
   'top-day': 'Today',
@@ -7,7 +7,10 @@ export const FEED_LABELS: Record<FeedKind, string> = {
   latest: 'Latest',
 };
 
-export const MY_FEED_LABEL = 'My feed';
+export const PERSONAL_LABELS: Record<PersonalTab, string> = {
+  mine: 'My feed',
+  reading: 'Reading list',
+};
 
 interface Props {
   active: FeedTab | null;
@@ -17,7 +20,7 @@ interface Props {
 
 export function FeedTabs({ active, showMine, onChange }: Props) {
   const tabs: [FeedTab, string][] = [
-    ...(showMine ? [['mine', MY_FEED_LABEL] as [FeedTab, string]] : []),
+    ...(showMine ? (Object.entries(PERSONAL_LABELS) as [PersonalTab, string][]) : []),
     ...(Object.entries(FEED_LABELS) as [FeedKind, string][]),
   ];
 

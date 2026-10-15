@@ -110,3 +110,48 @@ select {
     transition-duration: 0.01ms !important;
   }
 }
+
+.btn-primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+}
+
+.btn-primary:active {
+  background: var(--accent-active);
+}
+
+/* Shared by settings and the dashboard. */
+.segmented {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.segment {
+  height: 30px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.segment:hover {
+  color: var(--text);
+}
+
+.segment[aria-checked='true'] {
+  background: var(--surface-raised);
+  color: var(--text);
+}

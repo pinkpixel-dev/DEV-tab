@@ -4,7 +4,7 @@ import type { FeedTab } from './api/types';
 export type Density = 'comfortable' | 'compact';
 
 export interface Settings {
-  // 'mine' only works with an API key. The new tab falls back to Today without one.
+  // Personal tabs only work with an API key. The new tab falls back to Today without one.
   defaultFeed: FeedTab;
   density: Density;
   savedTags: string[];
