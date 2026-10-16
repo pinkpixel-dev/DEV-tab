@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { dedupe, fetchFeed, fetchMyFeed, hideTagged, MY_FEED_TAGS, PER_PAGE, searchArticles } from '@/lib/api/articles';
+import { dedupe, fetchFeed, fetchMyFeed, hideTagged, MY_FEED_TAGS, PER_PAGE, smartSearch } from '@/lib/api/articles';
 import { ApiError } from '@/lib/api/client';
 import type { Article, FeedKind } from '@/lib/api/types';
 import { readCache, writeCache } from '@/lib/cache';
@@ -12,7 +12,7 @@ export type FeedSource =
   | { type: 'feed'; kind: FeedKind; tag?: string }
   | { type: 'mine'; apiKey: string }
   | { type: 'reading'; apiKey: string }
-  | { type: 'search'; q: string }
+  | { type: 'search'; q: string; apiKey?: string }
   | { type: 'orgs'; usernames: string[] }
   | { type: 'org'; username: string }
   | { type: 'trend'; slug: string };
@@ -32,7 +32,7 @@ function sourceKey(source: FeedSource): string {
 
 async function load(source: FeedSource, page: number, signal: AbortSignal) {
   if (source.type === 'feed') return fetchFeed({ kind: source.kind, tag: source.tag, page }, signal);
-  if (source.type === 'search') return searchArticles(source.q, page, signal);
+  if (source.type === 'search') return smartSearch(source.q, page, source.apiKey, signal);
   if (source.type === 'reading') return fetchReadingList(source.apiKey, page, signal);
   if (source.type === 'orgs') return fetchOrgsFeed(source.usernames, signal);
   if (source.type === 'org') return fetchOrgArticles(source.username, page, signal);

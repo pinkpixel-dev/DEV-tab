@@ -31,7 +31,13 @@ export function ArticleCard({ article, density, saved, onTagClick }: Props) {
 
       <div className="card-body">
         <div className="card-meta">
-          <img className="avatar" src={article.user.profile_image_90} alt="" loading="lazy" width={20} height={20} />
+          {article.user.profile_image_90 ? (
+            <img className="avatar" src={article.user.profile_image_90} alt="" loading="lazy" width={20} height={20} />
+          ) : (
+            <span className="avatar avatar-initial" aria-hidden="true">
+              {article.user.username.charAt(0)}
+            </span>
+          )}
           <span className="card-author">{author}</span>
           <span aria-hidden="true">·</span>
           <time dateTime={article.published_at} title={article.readable_publish_date}>

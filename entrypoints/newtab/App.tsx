@@ -86,7 +86,7 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
   );
 
   const source = useMemo<FeedSource | null>(() => {
-    if (query) return { type: 'search', q: query };
+    if (query) return { type: 'search', q: query, apiKey: apiKey ?? undefined };
     if (kind === 'orgs') {
       if (activeOrg) return { type: 'org', username: activeOrg };
       if (settings.orgs.length === 0) return null;

@@ -29,6 +29,57 @@ export function searchArticles(q: string, page: number, signal?: AbortSignal) {
   return apiGet<Article[]>('/articles/search', { q, page, per_page: PER_PAGE }, signal);
 }
 
+// Semantic search sends raw database fields instead of the usual article
+// shape (checked live on 2026-10-15). There's no author object, so the card
+// shows the username from the post's path with an initial for the avatar.
+export interface SemanticHit {
+  id: number;
+  title: string;
+  description: string | null;
+  main_image: string | null;
+  published_at: string;
+  cached_tag_list: string | null;
+  path: string;
+  comments_count: number;
+  public_reactions_count: number;
+  reading_time: number;
+}
+
+const shortDate = new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric' });
+
+export function fromSemanticHit(hit: SemanticHit): Article {
+  // For org posts the first path segment is the org, which is still the right name to show.
+  const username = hit.path.split('/').find(Boolean) ?? '';
+  return {
+    id: hit.id,
+    title: hit.title,
+    description: hit.description ?? '',
+    url: `https://dev.to${hit.path}`,
+    cover_image: hit.main_image,
+    tag_list: (hit.cached_tag_list ?? '').split(/[\s,]+/).filter(Boolean),
+    reading_time_minutes: hit.reading_time,
+    public_reactions_count: hit.public_reactions_count,
+    comments_count: hit.comments_count,
+    published_at: hit.published_at,
+    readable_publish_date: shortDate.format(new Date(hit.published_at)),
+    user: { name: `@${username}`, username, profile_image_90: '' },
+  };
+}
+
+// Search by meaning when a key is connected. Any failure, like DEV's 503
+// when it can't embed the query, quietly falls back to keyword search.
+export async function smartSearch(q: string, page: number, apiKey?: string, signal?: AbortSignal): Promise<Article[]> {
+  if (apiKey) {
+    try {
+      const hits = await apiGet<SemanticHit[]>('/articles/semantic_search', { q, page, per_page: PER_PAGE }, signal, apiKey);
+      return hits.map(fromSemanticHit);
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') throw err;
+    }
+  }
+  return searchArticles(q, page, signal);
+}
+
 export function hideTagged(articles: Article[], hiddenTags: string[]): Article[] {
   if (hiddenTags.length === 0) return articles;
   const hidden = new Set(hiddenTags);

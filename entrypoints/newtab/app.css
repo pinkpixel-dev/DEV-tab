@@ -33,6 +33,14 @@
 .feed-tabs {
   display: flex;
   gap: 2px;
+  /* Scrolls sideways on narrow screens instead of widening the page. The
+     padding keeps focus rings from being clipped by the overflow. */
+  min-width: 0;
+  max-width: 100%;
+  margin: -4px;
+  padding: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
 .feed-tab {
