@@ -15,6 +15,8 @@
 - Reading list tab when an API key is connected
 - New post button in the top bar that opens the DEV editor
 - Posts from an earlier year now show the year ("Oct 4, 2024") instead of just the month and day
+- Click the heart on a card to see each reaction count (💖 🦄 🤯 🙌 🔥), the same picker DEV uses. Picking one opens the post on DEV so you can react there
+- Posts in your reading list get a filled bookmark on their card when an API key is connected
 
 ### 🏢 Orgs
 

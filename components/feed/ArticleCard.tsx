@@ -1,15 +1,17 @@
-import { Clock, Heart, MessageCircle } from 'lucide-react';
+import { Bookmark, Clock, MessageCircle } from 'lucide-react';
 import type { Article } from '@/lib/api/types';
 import type { Density } from '@/lib/settings';
 import { formatCount, timeAgo } from '@/lib/format';
+import { ReactionPicker } from './ReactionPicker';
 
 interface Props {
   article: Article;
   density: Density;
+  saved?: boolean;
   onTagClick: (tag: string) => void;
 }
 
-export function ArticleCard({ article, density, onTagClick }: Props) {
+export function ArticleCard({ article, density, saved, onTagClick }: Props) {
   const author = article.organization?.name ?? article.user.name;
   const showMedia = density === 'comfortable';
 
@@ -58,16 +60,18 @@ export function ArticleCard({ article, density, onTagClick }: Props) {
         )}
 
         <div className="card-stats">
-          <span title="Reactions">
-            <Heart size={14} aria-hidden="true" />
-            <span className="sr-only">Reactions: </span>
-            {formatCount(article.public_reactions_count)}
-          </span>
+          <ReactionPicker articleId={article.id} url={article.url} total={article.public_reactions_count} />
           <span title="Comments">
             <MessageCircle size={14} aria-hidden="true" />
             <span className="sr-only">Comments: </span>
             {formatCount(article.comments_count)}
           </span>
+          {saved && (
+            <span title="In your reading list" className="card-saved">
+              <Bookmark size={14} fill="currentColor" aria-hidden="true" />
+              <span className="sr-only">Saved</span>
+            </span>
+          )}
           <span title="Reading time" className="card-read">
             <Clock size={14} aria-hidden="true" />
             {article.reading_time_minutes} min

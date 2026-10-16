@@ -25,6 +25,7 @@ import { useCachedData } from '@/hooks/useCachedData';
 import { useFeed, type FeedSource } from '@/hooks/useFeed';
 import { useFollowedTags } from '@/hooks/useFollowedTags';
 import { useKeyboardNav } from '@/hooks/useKeyboardNav';
+import { useSavedIds } from '@/hooks/useSavedIds';
 import { useSettings } from '@/hooks/useSettings';
 import type { ApiError } from '@/lib/api/client';
 import { currentEvents, fetchEvents } from '@/lib/api/events';
@@ -70,6 +71,7 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
   const gridRef = useRef<HTMLDivElement>(null);
 
   const followedTags = useFollowedTags(apiKey);
+  const savedIds = useSavedIds(apiKey);
   const chipTags = followedTags ?? settings.savedTags;
 
   const view = query ? 'search' : kind;
@@ -241,6 +243,7 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
               articles={feed.articles}
               density={settings.density}
               loading={feed.status === 'loading'}
+              savedIds={savedIds}
               onTagClick={pickTag}
             />
             {feed.status === 'ready' && (

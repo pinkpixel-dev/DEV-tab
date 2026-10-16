@@ -1,0 +1,131 @@
+.reaction-btn {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: -3px -6px;
+  padding: 3px 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.reaction-btn:hover,
+.reaction-btn:has(+ .reaction-pop:popover-open) {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.reaction-btn:active {
+  background: var(--border);
+}
+
+.reaction-pop {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  color: var(--text);
+  font-family: var(--font-sans);
+  box-shadow: 0 8px 24px oklch(0.1 0.01 265 / 0.45);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    display var(--dur-fast) allow-discrete,
+    overlay var(--dur-fast) allow-discrete;
+}
+
+.reaction-pop:popover-open {
+  opacity: 1;
+  transform: none;
+}
+
+@starting-style {
+  .reaction-pop:popover-open {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.reaction-list {
+  display: flex;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reaction-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 46px;
+  padding: 7px 0 5px;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.reaction-item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.reaction-item:active {
+  background: var(--border);
+}
+
+.reaction-emoji {
+  font-size: 22px;
+  line-height: 1;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.reaction-item:hover .reaction-emoji {
+  transform: translateY(-2px);
+}
+
+.reaction-count {
+  display: flex;
+  align-items: center;
+  height: 15px;
+}
+
+.reaction-sk {
+  display: block;
+  width: 14px;
+  height: 8px;
+}
+
+.reaction-note {
+  margin: 4px 6px 2px;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.card-saved {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reaction-pop,
+  .reaction-emoji {
+    transition: none;
+  }
+}

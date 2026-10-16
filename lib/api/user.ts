@@ -35,3 +35,10 @@ export async function fetchReadingList(apiKey: string, page: number, signal?: Ab
   const items = await apiGet<ReadingListItem[]>('/readinglist', { page, per_page: PER_PAGE }, signal, apiKey);
   return fromReadingList(items);
 }
+
+// Ids of your 100 newest saves, the most one request can return. Cards use it
+// to mark saved posts, and new-tab posts are almost always recent saves.
+export async function fetchSavedIds(apiKey: string, signal?: AbortSignal): Promise<number[]> {
+  const items = await apiGet<ReadingListItem[]>('/readinglist', { per_page: 100 }, signal, apiKey);
+  return fromReadingList(items).map((a) => a.id);
+}
