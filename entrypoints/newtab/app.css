@@ -160,3 +160,31 @@
 .results-heading span {
   color: var(--text-muted);
 }
+
+/* Narrow screens: the search gets its own row under the buttons so it isn't
+   squeezed to nothing, and New post shrinks to its icon. */
+@media (max-width: 560px) {
+  .topbar-actions {
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+
+  .search {
+    order: 1;
+    flex-basis: 100%;
+  }
+
+  .new-post {
+    width: 36px;
+    padding: 0;
+  }
+
+  .new-post-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}

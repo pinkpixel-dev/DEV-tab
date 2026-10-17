@@ -134,9 +134,9 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
         </div>
         <FeedTabs active={query ? null : kind} showMine={apiKey !== null} onChange={pickKind} />
         <div className="topbar-actions">
-          <a className="btn btn-primary" href="https://dev.to/new" title="Write a new post on DEV">
+          <a className="btn btn-primary new-post" href="https://dev.to/new" title="Write a new post on DEV">
             <SquarePen size={16} aria-hidden="true" />
-            New post
+            <span className="new-post-label">New post</span>
           </a>
           <SearchBox ref={searchRef} active={query} onSearch={setQuery} onClear={() => setQuery(null)} />
           <button
