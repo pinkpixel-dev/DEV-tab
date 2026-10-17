@@ -52,7 +52,7 @@ If this policy changes, the new version goes in this file with a new date, and t
 
 ## Contact
 
-Questions about privacy? Email [support@pinkpixel.dev](mailto:support@pinkpixel.dev) or open an issue on [GitHub](https://github.com/sizzlebop/DEV-tab/issues).
+Questions about privacy? Email [support@pinkpixel.dev](mailto:support@pinkpixel.dev) or open an issue on [GitHub](https://github.com/pinkpixel-dev/DEV-tab/issues).
 
 DEV Tab is an independent project and isn't affiliated with DEV or Forem.
 

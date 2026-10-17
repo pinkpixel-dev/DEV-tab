@@ -9,7 +9,7 @@ export default defineConfig({
   manifest: ({ browser }) => ({
     name: 'DEV Tab',
     description: 'Your new tab, filled with DEV (dev.to) posts. Feeds, search, reactions and comments, plus your own stats with a DEV API key.',
-    homepage_url: 'https://github.com/sizzlebop/DEV-tab',
+    homepage_url: 'https://github.com/pinkpixel-dev/DEV-tab',
     permissions: ['storage'],
     host_permissions: ['https://dev.to/*'],
     // Firefox needs a stable add-on id; Chrome warns about the key, so it's Firefox only.
