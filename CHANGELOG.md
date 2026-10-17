@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### 📰 Feed
+
+- More posts load on their own as you scroll near the bottom. The Load more button is still there for keyboard use and for retrying after an error
+
 ### 📊 Dashboard
 
 - The activity heatmap stretches to fill the whole card on wide screens instead of stopping partway across

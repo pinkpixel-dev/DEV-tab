@@ -135,7 +135,7 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
     <div className="page">
       <header className="topbar">
         <div className="brand">
-          <img src="/icon/32.png" alt="" width={22} height={22} />
+          <img src="/icon/96.png" alt="" width={30} height={30} />
           <span>{APP_NAME}</span>
         </div>
         <FeedTabs active={query ? null : kind} showMine={apiKey !== null} onChange={pickKind} />
