@@ -8,6 +8,8 @@ I wanted something like daily.dev that only shows DEV, so I made it. It works in
 
 - Shows a grid of DEV posts every time you open a new tab
 - Switches between **Today**, **This week**, **Rising** and **Latest**
+- **Trends**, **Events** (live streams and challenges), **Podcasts** and **Videos** tabs
+- **Orgs** tab with posts from the DEV organizations you pick
 - Filters by tag. Keep your favorite tags as quick filters, or click any tag on a card
 - Hides posts with tags you never want to see
 - Searches DEV from the box at the top (press `/` to jump there)
@@ -15,12 +17,13 @@ I wanted something like daily.dev that only shows DEV, so I made it. It works in
 - **Compact** mode drops the cover images if you want more posts on screen
 - Caches the feed for 10 minutes, so new tabs open instantly and you still see posts when you're offline
 - **New post** button that takes you straight to the DEV editor
+- Click the heart on a card to see every reaction count, or the comment count to read the three newest comments
 
-Clicking a post opens it on dev.to. Commenting, bookmarking and reacting happen there for now.
+Clicking a post opens it on dev.to. DEV's API doesn't let apps react, comment or bookmark, so those happen on the site.
 
 ## Install
 
-DEV Tab isn't in the Chrome Web Store or Firefox Add-ons yet. Until it is, you can build it and load it yourself.
+DEV Tab is on its way to the Chrome Web Store and Firefox Add-ons. Until it's listed, you can build it and load it yourself.
 
 You'll need Node.js and npm. Grab a copy of this repo, then install the dependencies from its folder:
 
@@ -47,7 +50,7 @@ npm run build:firefox
 1. Go to `about:debugging` and click **This Firefox**.
 2. Click **Load Temporary Add-on** and pick `manifest.json` in `.output/firefox-mv2`.
 
-Firefox removes temporary add-ons when it restarts, so you'll need to load it again after that.
+Firefox removes temporary add-ons when it restarts, so you'll need to load it again after that. DEV Tab needs Firefox 140 or newer.
 
 ## Settings
 
@@ -59,6 +62,8 @@ Click the gear icon in the top right, or open the extension's options from your 
 | Card density | Comfortable shows cover images and descriptions. Compact hides them |
 | Your tags | The quick filter chips above the feed |
 | Hidden tags | Posts with any of these tags never show up |
+| Orgs | DEV organizations for the Orgs tab. Add them by username or by pasting any dev.to link |
+| DEV API key | Optional. Turns on the account features below |
 
 Changes apply right away, including in tabs you already have open.
 
@@ -68,13 +73,17 @@ Everything above works without an account. If you add a DEV API key in settings,
 
 - **My feed**, built from the tags you follow on DEV
 - **Reading list**, the posts you've saved on DEV (view only, since the API can't save posts)
-- **Dashboard**, opened from the grid icon next to your avatar. It shows your follower count, views, reactions, comments and new followers for the last 7, 30 or 90 days, a daily views chart, your posts and drafts with edit links, recent followers, your top supporters and where your readers came from
+- **Dashboard**, opened from the grid icon next to your avatar. It shows your follower count, views, reactions, comments and new followers for the last 7, 30 or 90 days, a daily views chart, an activity heatmap you can step back through year by year, your posts and drafts with edit links, recent followers, your top supporters and where your readers came from
+- **Smarter search** that finds posts by meaning, not just matching words
+- A bookmark on cards for posts already in your reading list
 
-You can create a key under **DEV API Keys** at [dev.to/settings/extensions](https://dev.to/settings/extensions). It stays in this browser's extension storage and only gets sent to `dev.to`.
+You can create a key under **DEV API Keys** at [dev.to/settings/extensions](https://dev.to/settings/extensions). It stays in this browser's extension storage and only gets sent to `dev.to`. On Firefox, you'll get a prompt asking whether DEV Tab can send it.
 
 ## Privacy
 
-DEV Tab only talks to `dev.to`. Settings, your API key (if you add one) and cached data live in your browser's extension storage, and nothing gets sent anywhere else. Removing the key also clears everything that was cached for your account.
+DEV Tab has no server, analytics or tracking. Requests go to `dev.to`, and images load from DEV's image servers and YouTube thumbnails. Settings, your API key (if you add one) and cached data live in your browser's extension storage. Removing the key also clears everything that was cached for your account.
+
+The full details are in [PRIVACY.md](PRIVACY.md).
 
 ## Development
 
@@ -87,11 +96,7 @@ npm run zip            # Chrome Web Store zip
 npm run zip:firefox    # Firefox Add-ons zips
 ```
 
-It's built with [WXT](https://wxt.dev), React and TypeScript. [DOCS/TESTING-AND-PACKAGING.md](DOCS/TESTING-AND-PACKAGING.md) walks through testing and packaging in more detail. [DOCS/reference/DEV-API.md](DOCS/reference/DEV-API.md) has my notes on the DEV API.
-
-## What's next
-
-Getting it into the Chrome Web Store and Firefox Add-ons. [DOCS/ROADMAP.md](DOCS/ROADMAP.md) has the rest.
+It's built with [WXT](https://wxt.dev), React and TypeScript. `npm run zip:firefox` also makes the sources zip that Firefox Add-ons asks for, since the shipped code is bundled.
 
 ## License
 

@@ -1,6 +1,16 @@
 # Changelog
 
-## Unreleased
+## 1.0.0 - October 16, 2026
+
+The first store release. Everything since 0.1.0 is below.
+
+### 🔑 Account
+
+- Connect an optional DEV API key in settings. It's checked with DEV before it's saved, stays in your browser's extension storage, and only ever goes to dev.to
+- My feed tab built from the tags you follow on DEV, and your followed tags as the quick filters above the feed
+- Your avatar in the top bar links to your DEV profile
+- Removing the key clears everything that was cached for your account
+- Firefox asks for your OK before the key is first sent to DEV, and removes the key if you take that back in the add-on's settings
 
 ### 📊 Dashboard
 
@@ -44,7 +54,11 @@
 ### ⚙️ Settings
 
 - Tag fields suggest DEV's 1000 most popular tags as you type
-- Orgs, Trends and Events can be picked as the default feed
+- Orgs, Trends, Events, Podcasts and Videos can be picked as the default feed
+
+### 🏷️ Versioning
+
+- 1.0.0, the first version submitted to the Chrome Web Store and Firefox Add-ons
 
 ## 0.1.0 - October 11, 2026
 

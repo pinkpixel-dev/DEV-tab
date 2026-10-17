@@ -1,6 +1,6 @@
 import { useId, useState, type FormEvent } from 'react';
 import { KeyRound, LoaderCircle, LogOut } from 'lucide-react';
-import { connectAccount, disconnectAccount } from '@/lib/account';
+import { connectAccount, disconnectAccount, requestKeyConsent } from '@/lib/account';
 import { ApiError } from '@/lib/api/client';
 import type { Account } from '@/lib/api/types';
 import './account.css';
@@ -27,8 +27,12 @@ export function KeyForm({ account }: Props) {
   async function submit(e: FormEvent) {
     e.preventDefault();
     if (!draft.trim() || checking) return;
-    setChecking(true);
     setError(null);
+    if (!(await requestKeyConsent())) {
+      setError('Firefox needs your OK to send the key to DEV. Try again and allow it.');
+      return;
+    }
+    setChecking(true);
     try {
       await connectAccount(draft);
       setDraft('');

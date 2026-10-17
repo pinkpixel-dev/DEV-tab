@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { accountItem, apiKeyItem } from '@/lib/account';
+import { accountItem, apiKeyItem, disconnectAccount, hasKeyConsent } from '@/lib/account';
 import type { Account } from '@/lib/api/types';
 
 export function useAccount() {
@@ -8,7 +8,14 @@ export function useAccount() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    Promise.all([apiKeyItem.getValue(), accountItem.getValue()]).then(([key, acct]) => {
+    Promise.all([apiKeyItem.getValue(), accountItem.getValue(), hasKeyConsent()]).then(async ([key, acct, consent]) => {
+      // Consent withdrawn in Firefox's add-on settings: drop the key instead
+      // of sending it again.
+      if (key && !consent) {
+        await disconnectAccount();
+        key = null;
+        acct = null;
+      }
       setApiKey(key);
       setAccount(acct);
       setReady(true);

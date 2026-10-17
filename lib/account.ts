@@ -10,6 +10,25 @@ export const accountItem = storage.defineItem<Account | null>('local:account', {
 // clear all of them at once.
 export const PERSONAL_CACHE_PREFIX = 'cache:me:';
 
+// Firefox treats the key as authentication info, which needs the user's OK
+// before it's sent anywhere. The manifest lists it as optional data
+// collection, so Firefox asks when a key is first connected. Other browsers
+// have no such prompt.
+const KEY_CONSENT = { data_collection: ['authenticationInfo'] } as never;
+
+// Has to be the first thing a click or submit handler awaits, or Firefox
+// won't show the prompt.
+export async function requestKeyConsent(): Promise<boolean> {
+  if (!import.meta.env.FIREFOX) return true;
+  return browser.permissions.request(KEY_CONSENT);
+}
+
+export async function hasKeyConsent(): Promise<boolean> {
+  if (!import.meta.env.FIREFOX) return true;
+  const all = (await browser.permissions.getAll()) as { data_collection?: string[] };
+  return !all.data_collection || all.data_collection.includes('authenticationInfo');
+}
+
 export async function connectAccount(apiKey: string): Promise<Account> {
   const key = apiKey.trim();
   const account = await fetchMe(key);
