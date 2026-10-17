@@ -1,0 +1,143 @@
+.reaction-btn:has(+ .comment-pop:popover-open) {
+  background: var(--surface-raised);
+  color: var(--text);
+}
+
+.comment-pop {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface-raised);
+  color: var(--text);
+  font-family: var(--font-sans);
+  box-shadow: 0 8px 24px oklch(0.1 0.01 265 / 0.45);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    display var(--dur-fast) allow-discrete,
+    overlay var(--dur-fast) allow-discrete;
+}
+
+.comment-pop:popover-open {
+  opacity: 1;
+  transform: none;
+}
+
+@starting-style {
+  .comment-pop:popover-open {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.comment-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.comment-item:hover {
+  background: var(--surface-hover);
+}
+
+.comment-item:active {
+  background: var(--border);
+}
+
+.comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.comment-name {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.comment-meta time {
+  flex: none;
+}
+
+.comment-text {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 13.5px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.comment-sk {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 10px;
+}
+
+.comment-sk-line {
+  display: block;
+  height: 9px;
+  /* .sk's own color matches the popover, so it needs a step up. */
+  background: var(--border);
+}
+
+.comment-sk-line + .comment-sk-line {
+  width: 70%;
+}
+
+.comment-note {
+  padding: 10px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.comment-all {
+  display: block;
+  margin-top: 4px;
+  padding: 8px 10px 6px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.comment-all:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comment-pop {
+    transition: none;
+  }
+}

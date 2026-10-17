@@ -1,7 +1,8 @@
 import { Bookmark, Clock, MessageCircle } from 'lucide-react';
 import type { Article } from '@/lib/api/types';
 import type { Density } from '@/lib/settings';
-import { formatCount, timeAgo } from '@/lib/format';
+import { timeAgo } from '@/lib/format';
+import { CommentPreviews } from './CommentPreviews';
 import { ReactionPicker } from './ReactionPicker';
 
 interface Props {
@@ -67,11 +68,14 @@ export function ArticleCard({ article, density, saved, onTagClick }: Props) {
 
         <div className="card-stats">
           <ReactionPicker articleId={article.id} url={article.url} total={article.public_reactions_count} />
-          <span title="Comments">
-            <MessageCircle size={14} aria-hidden="true" />
-            <span className="sr-only">Comments: </span>
-            {formatCount(article.comments_count)}
-          </span>
+          {article.comments_count > 0 ? (
+            <CommentPreviews articleId={article.id} url={article.url} count={article.comments_count} />
+          ) : (
+            <span title="Comments">
+              <MessageCircle size={14} aria-hidden="true" />
+              <span className="sr-only">Comments: </span>0
+            </span>
+          )}
           {saved && (
             <span title="In your reading list" className="card-saved">
               <Bookmark size={14} fill="currentColor" aria-hidden="true" />
