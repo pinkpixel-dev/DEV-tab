@@ -1,6 +1,11 @@
 # Changelog
 
-## Unreleased
+## 1.0.1 - October 17, 2026
+
+### 🎨 Look
+
+- New app icon in the toolbar, on the extensions page and in the store listings
+- The logo in the top left corner is bigger and sharper
 
 ### 📰 Feed
 
