@@ -1,3 +1,12 @@
+/* The panel is a size container so the squares can work out their height
+   from its width (see .heat-cell). */
+.heat {
+  container-type: inline-size;
+  /* Square size for a year of weeks after the padding, the weekday labels
+     and the gaps, kept between 10px and 22px. */
+  --heat-cell: clamp(10px, (100cqi - 75px - 156px) / 53, 22px);
+}
+
 .heat .panel-head {
   margin-bottom: 4px;
 }
@@ -82,7 +91,6 @@
   position: relative;
   flex: 1 1 0;
   min-width: 10px;
-  max-width: 22px;
 }
 
 .heat-month {
@@ -97,11 +105,13 @@
   gap: 3px;
 }
 
+/* Columns always stretch to fill the card. Rows keep the square height, so
+   on very wide screens the squares turn into short bars instead of leaving
+   an empty strip on the right. */
 .heat-cell {
   flex: 1 1 0;
   min-width: 10px;
-  max-width: 22px;
-  aspect-ratio: 1;
+  height: var(--heat-cell);
   border-radius: 3px;
   background: var(--heat-0);
 }
@@ -170,6 +180,7 @@
 .heat-legend .heat-cell {
   flex: none;
   width: 10px;
+  height: 10px;
   min-width: 0;
 }
 

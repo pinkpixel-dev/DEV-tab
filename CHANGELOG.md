@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### 📊 Dashboard
+
+- The activity heatmap stretches to fill the whole card on wide screens instead of stopping partway across
+
 ## 1.0.0 - October 16, 2026
 
 The first store release. Everything since 0.1.0 is below.

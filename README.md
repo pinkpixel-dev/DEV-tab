@@ -4,6 +4,12 @@ DEV Tab replaces your browser's new tab page with a feed of posts from [DEV](htt
 
 I wanted something like daily.dev that only shows DEV, so I made it. It works in Chrome and Firefox and doesn't need an account.
 
+![The DEV Tab new tab page, a grid of DEV posts with feed tabs and tag filters along the top](screenshots/screenshot.png)
+
+![The DEV Tab dashboard with stat tiles, a daily views chart, the activity heatmap and a list of posts, shown with example data](screenshots/dashboard.png)
+
+*The dashboard shot uses example data.*
+
 ## What it does
 
 - Shows a grid of DEV posts every time you open a new tab
