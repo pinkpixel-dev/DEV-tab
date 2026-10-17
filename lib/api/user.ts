@@ -9,11 +9,14 @@ import type { Account, Article, FollowedTag } from './types';
 export function toAccount(raw: Record<string, unknown>): Account {
   const str = (v: unknown) => (typeof v === 'string' ? v : '');
   const username = str(raw.username);
+  // `joined_at` is a formatted date like "Jun  4, 2023", so only the year is read.
+  const joined = /\b(\d{4})\b/.exec(str(raw.joined_at));
   return {
     id: typeof raw.id === 'number' ? raw.id : 0,
     username,
     name: str(raw.name) || username,
     image: str(raw.profile_image) || str(raw.profile_image_90),
+    ...(joined && { joinedYear: Number(joined[1]) }),
   };
 }
 

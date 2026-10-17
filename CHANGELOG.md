@@ -9,6 +9,7 @@
 - Daily views chart with per-day hover readouts
 - Your posts with views, reactions and comments, sortable by newest or most viewed, plus your drafts with edit links
 - Recent followers, top supporters, reaction breakdown and where your readers came from
+- Activity heatmap with one square per day for your posts, comments and reactions given. Hover or focus a day for its breakdown, use the arrow keys to move around, and step back through each year since you joined
 
 ### 📰 Feed
 

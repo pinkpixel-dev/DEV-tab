@@ -43,6 +43,8 @@ export interface Account {
   username: string;
   name: string;
   image: string;
+  // From `joined_at`. Accounts saved before this was added don't have it.
+  joinedYear?: number;
 }
 
 // From GET /follows/tags. `points` is the weight DEV gives each followed tag.

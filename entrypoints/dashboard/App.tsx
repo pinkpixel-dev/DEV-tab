@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ArrowLeft, CloudOff, KeyRound, RefreshCw, SquarePen, TriangleAlert } from 'lucide-react';
+import { ActivityHeatmap } from '@/components/dashboard/ActivityHeatmap';
 import { FollowersPanel, ReactionsPanel, ReferrersPanel, SupportersPanel } from '@/components/dashboard/Panels';
 import { PostsTable } from '@/components/dashboard/PostsTable';
 import { StatTiles } from '@/components/dashboard/StatTiles';
@@ -16,6 +17,7 @@ import {
   sumDays,
   type RangeDays,
 } from '@/lib/api/dashboard';
+import { FALLBACK_FIRST_YEAR, fetchHeatmap, heatWindows, summarize } from '@/lib/api/heatmap';
 import type { Account } from '@/lib/api/types';
 
 export default function App() {
@@ -43,18 +45,25 @@ function Dashboard({ apiKey, account }: { apiKey: string; account: Account }) {
   const posts = usePersonalData('articles', (s) => fetchMyArticles(apiKey, s));
   const followers = usePersonalData('followers', (s) => fetchFollowers(apiKey, s));
 
-  const loading = [stats, posts, followers].some((r) => r.status === 'loading');
+  const windows = useMemo(() => heatWindows(account.joinedYear ?? FALLBACK_FIRST_YEAR), [account.joinedYear]);
+  const [heatIndex, setHeatIndex] = useState(0);
+  const heatWindow = windows[heatIndex] ?? 'rolling';
+  const heat = usePersonalData(`heatmap:${heatWindow}`, (s) => fetchHeatmap(apiKey, heatWindow, s));
+  const heatSummary = useMemo(() => (heat.data ? summarize(heat.data, heatWindow) : null), [heat.data, heatWindow]);
+
+  const loading = [stats, posts, followers, heat].some((r) => r.status === 'loading');
   const totals = stats.data ? sumDays(stats.data.historical) : null;
 
   function reloadAll() {
     stats.reload();
     posts.reload();
     followers.reload();
+    heat.reload();
   }
 
   // Only a banner when cached data is still showing. A section with nothing
   // to show gets its own error state instead.
-  const staleError = [stats, posts, followers].find((r) => r.error && r.data)?.error;
+  const staleError = [stats, posts, followers, heat].find((r) => r.error && r.data)?.error;
 
   return (
     <div className="dash">
@@ -124,6 +133,15 @@ function Dashboard({ apiKey, account }: { apiKey: string; account: Account }) {
           <ViewsChart points={stats.data ? dailyViews(stats.data.historical) : null} />
         </>
       )}
+
+      <ActivityHeatmap
+        summary={heatSummary}
+        failed={heat.status === 'error'}
+        onRetry={heat.reload}
+        label={heatWindow === 'rolling' ? 'Past year' : String(heatWindow)}
+        onOlder={heatIndex < windows.length - 1 ? () => setHeatIndex(heatIndex + 1) : null}
+        onNewer={heatIndex > 0 ? () => setHeatIndex(heatIndex - 1) : null}
+      />
 
       <div className="dash-columns">
         <PostsTable posts={posts.data} status={posts.status} error={posts.error} onRetry={posts.reload} />

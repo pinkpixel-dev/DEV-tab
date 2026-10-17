@@ -23,6 +23,13 @@
   --danger: oklch(0.7 0.16 25);
   --success: oklch(0.78 0.13 155);
 
+  /* Activity heatmap shades, from no activity up to the accent. */
+  --heat-0: var(--surface-raised);
+  --heat-1: oklch(0.4 0.06 78);
+  --heat-2: oklch(0.53 0.09 78);
+  --heat-3: oklch(0.67 0.11 78);
+  --heat-4: var(--accent);
+
   --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
 
   --radius-sm: 6px;

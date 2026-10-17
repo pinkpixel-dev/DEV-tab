@@ -1,0 +1,182 @@
+.heat .panel-head {
+  margin-bottom: 4px;
+}
+
+.heat-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.heat-step {
+  width: 32px;
+  height: 32px;
+}
+
+.heat-label {
+  min-width: 76px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.heat-readout {
+  min-height: 21px;
+  margin-bottom: 14px;
+}
+
+.heat-breakdown {
+  color: var(--text-faint);
+}
+
+.heat-scroll {
+  display: flex;
+  gap: 8px;
+  /* The grid scrolls sideways inside the card on narrow screens. The padding
+     keeps focus rings on edge squares from being clipped. */
+  margin: -4px;
+  padding: 4px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.heat-days {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  /* Lines up with the grid under the month row. */
+  padding-top: 21px;
+  color: var(--text-faint);
+  font-size: 11px;
+}
+
+.heat-days span {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-height: 10px;
+  line-height: 1;
+}
+
+.heat-body {
+  flex: 1;
+  min-width: max-content;
+}
+
+.heat-months,
+.heat-row {
+  display: flex;
+  gap: 3px;
+}
+
+.heat-months {
+  height: 15px;
+  margin-bottom: 6px;
+  color: var(--text-faint);
+  font-size: 11px;
+}
+
+.heat-months > span {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 10px;
+  max-width: 22px;
+}
+
+.heat-month {
+  position: absolute;
+  left: 0;
+  white-space: nowrap;
+}
+
+.heat-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.heat-cell {
+  flex: 1 1 0;
+  min-width: 10px;
+  max-width: 22px;
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: var(--heat-0);
+}
+
+.heat-cell[data-pad],
+.heat-cell[data-missing] {
+  background: none;
+}
+
+.heat-cell[data-missing] {
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.heat-cell[data-level='1'] {
+  background: var(--heat-1);
+}
+
+.heat-cell[data-level='2'] {
+  background: var(--heat-2);
+}
+
+.heat-cell[data-level='3'] {
+  background: var(--heat-3);
+}
+
+.heat-cell[data-level='4'] {
+  background: var(--heat-4);
+}
+
+.heat-grid .heat-cell[data-date]:hover {
+  outline: 1px solid var(--text-muted);
+  outline-offset: 1px;
+}
+
+.heat-grid .heat-cell:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.heat-sk {
+  height: 140px;
+}
+
+.heat-retry {
+  height: 30px;
+  font-size: 13px;
+}
+
+.heat-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-top: 12px;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.heat-legend {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.heat-legend .heat-cell {
+  flex: none;
+  width: 10px;
+  min-width: 0;
+}
+
+.heat-legend .heat-cell:first-child {
+  margin-left: 3px;
+}
+
+.heat-legend .heat-cell:last-of-type {
+  margin-right: 3px;
+}
