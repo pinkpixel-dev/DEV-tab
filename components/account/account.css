@@ -61,23 +61,6 @@
   outline: none;
   box-shadow: var(--focus-ring);
 }
-
-.shape-debug {
-  margin-top: 16px;
-}
-
-.shape-debug pre {
-  max-height: 480px;
-  margin-top: 12px;
-  padding: 12px;
-  overflow: auto;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  font-family: var(--font-mono);
-  font-size: 12px;
-}
-
 .user-badge-initial {
   display: grid;
   place-items: center;

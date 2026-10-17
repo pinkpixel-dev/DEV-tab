@@ -32,8 +32,11 @@
   box-shadow: var(--focus-ring);
 }
 
+/* Clipped because an aspect-ratio box grows to fit its content, so a square
+   or tall cover would otherwise stretch the card. */
 .card-media {
   aspect-ratio: 1000 / 420;
+  overflow: hidden;
   border-bottom: 1px solid var(--border);
   background: var(--surface-raised);
 }

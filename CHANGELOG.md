@@ -21,6 +21,7 @@
 - Click the comment count on a card to read the three newest comments without leaving the page. Each one links to the comment on DEV, and there's a link to the full discussion
 - Search finds posts by meaning when an API key is connected, so "rust text editor" turns up posts about building editors in Rust even when they're worded differently. Without a key, or if DEV's semantic search is down, it uses normal search
 - The feed tabs scroll sideways on narrow screens instead of making the whole page scroll
+- Cards with a square or tall cover image keep the same shape as the rest instead of growing taller
 - On narrow screens the search box gets its own row, and New post shrinks to its icon, so nothing overlaps
 
 ### 🎙️ Podcasts and videos

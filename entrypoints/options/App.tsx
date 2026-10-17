@@ -1,7 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { ArrowLeft, Check } from 'lucide-react';
 import { KeyForm } from '@/components/account/KeyForm';
-import { ShapeDebug } from '@/components/account/ShapeDebug';
 import { EXTRA_LABELS, FEED_LABELS, PERSONAL_LABELS } from '@/components/feed/FeedTabs';
 import { OrgListEditor } from '@/components/orgs/OrgListEditor';
 import { TagListEditor } from '@/components/tags/TagListEditor';
@@ -145,7 +144,6 @@ export default function App() {
             in your DEV settings. It stays in this browser.
           </p>
         )}
-        {import.meta.env.DEV && apiKey && <ShapeDebug apiKey={apiKey} />}
       </Row>
 
       <footer className="options-foot">
