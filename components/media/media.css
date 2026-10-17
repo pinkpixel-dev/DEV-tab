@@ -1,0 +1,16 @@
+.media-card .card-meta svg {
+  flex: none;
+}
+
+/* Square podcast art and 4:3 YouTube thumbnails would otherwise stretch the
+   frame past its aspect ratio, since an aspect-ratio box grows to fit its
+   content. Clipping it keeps every card the same shape. */
+.media-card .card-media {
+  overflow: hidden;
+}
+
+/* Podcast art is square, so it sits whole in the wide frame instead of
+   being cropped down to a strip. */
+.media-card[data-kind='podcast'] .card-media img {
+  object-fit: contain;
+}

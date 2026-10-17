@@ -14,6 +14,7 @@ import {
 import { UserBadge } from '@/components/account/UserBadge';
 import { EventsView } from '@/components/events/EventsView';
 import { FeedGrid } from '@/components/feed/FeedGrid';
+import { MediaView } from '@/components/media/MediaView';
 import { FeedTabs } from '@/components/feed/FeedTabs';
 import { LoadMore } from '@/components/feed/LoadMore';
 import { EventBar, OrgBar, TrendBar } from '@/components/feed/ViewBars';
@@ -29,6 +30,7 @@ import { useSavedIds } from '@/hooks/useSavedIds';
 import { useSettings } from '@/hooks/useSettings';
 import type { ApiError } from '@/lib/api/client';
 import { currentEvents, fetchEvents } from '@/lib/api/events';
+import { fetchPodcasts, fetchVideos } from '@/lib/api/media';
 import { ORG_FEED_MAX } from '@/lib/api/orgs';
 import { fetchTrends } from '@/lib/api/trends';
 import { isExtraTab, isPersonalTab, type Account, type DevEvent, type FeedTab } from '@/lib/api/types';
@@ -77,6 +79,9 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
   const view = query ? 'search' : kind;
   const trends = useCachedData('trends', fetchTrends, view === 'trends');
   const events = useCachedData('events', fetchEvents, view === 'events');
+  const podcasts = useCachedData('podcasts', fetchPodcasts, view === 'podcasts');
+  const videos = useCachedData('videos', fetchVideos, view === 'videos');
+  const media = view === 'podcasts' ? podcasts : view === 'videos' ? videos : null;
   const activeTrend = trends.data?.find((t) => t.slug === trendSlug) ?? trends.data?.[0] ?? null;
   // An org removed in settings drops out of the filter.
   const activeOrg = org && settings.orgs.some((o) => o.username === org) ? org : null;
@@ -93,7 +98,7 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
       return { type: 'orgs', usernames: settings.orgs.slice(0, ORG_FEED_MAX).map((o) => o.username) };
     }
     if (kind === 'trends') return activeTrend ? { type: 'trend', slug: activeTrend.slug } : null;
-    if (kind === 'events') return null;
+    if (kind === 'events' || kind === 'podcasts' || kind === 'videos') return null;
     if (isPersonalTab(kind)) {
       // A tag picked on a personal tab shows that tag's top posts this week,
       // the same way My feed itself is built.
@@ -118,9 +123,10 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
     setKind(next);
   }
 
-  const refreshing = view === 'events' ? events.status === 'loading' : feed.status === 'loading';
+  const refreshing = view === 'events' ? events.status === 'loading' : media ? media.status === 'loading' : feed.status === 'loading';
   function refresh() {
     if (view === 'events') return events.reload();
+    if (media) return media.reload();
     if (view === 'trends') trends.reload();
     feed.reload();
   }
@@ -178,7 +184,7 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
           <TrendBar trends={trends.data ?? []} active={activeTrend} onChange={setTrendSlug} />
         ) : kind === 'events' ? (
           <EventBar active={eventKind} onChange={setEventKind} />
-        ) : (
+        ) : media ? null : (
           <TagFilter savedTags={chipTags} active={tag} onChange={pickTag} />
         )}
       </div>
@@ -198,6 +204,16 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
             error={events.error}
             density={settings.density}
             onRetry={events.reload}
+          />
+        ) : media && (view === 'podcasts' || view === 'videos') ? (
+          <MediaView
+            ref={gridRef}
+            kind={view}
+            items={media.data ?? []}
+            status={media.status}
+            error={media.error}
+            density={settings.density}
+            onRetry={media.reload}
           />
         ) : view === 'orgs' && settings.orgs.length === 0 ? (
           <StatusMessage

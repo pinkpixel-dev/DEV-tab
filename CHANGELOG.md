@@ -23,6 +23,11 @@
 - The feed tabs scroll sideways on narrow screens instead of making the whole page scroll
 - On narrow screens the search box gets its own row, and New post shrinks to its icon, so nothing overlaps
 
+### 🎙️ Podcasts and videos
+
+- Podcasts tab with the newest episodes from the podcasts DEV hosts, linking to each episode's page
+- Videos tab with DEV's hottest video posts, using the YouTube thumbnail when there is one
+
 ### 🏢 Orgs
 
 - Orgs tab with posts from DEV organizations you pick, newest first

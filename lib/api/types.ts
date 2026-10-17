@@ -85,8 +85,9 @@ export interface DevEvent {
 // A tab on the new tab page: one of the public feeds, a personal tab
 // (My feed, Reading list) when a key is set, or one of the extra views.
 export type PersonalTab = 'mine' | 'reading';
-export type ExtraTab = 'orgs' | 'trends' | 'events';
+export type ExtraTab = 'orgs' | 'trends' | 'events' | 'podcasts' | 'videos';
 export type FeedTab = FeedKind | PersonalTab | ExtraTab;
 
 export const isPersonalTab = (tab: FeedTab): tab is PersonalTab => tab === 'mine' || tab === 'reading';
-export const isExtraTab = (tab: FeedTab): tab is ExtraTab => tab === 'orgs' || tab === 'trends' || tab === 'events';
+export const isExtraTab = (tab: FeedTab): tab is ExtraTab =>
+  tab === 'orgs' || tab === 'trends' || tab === 'events' || tab === 'podcasts' || tab === 'videos';

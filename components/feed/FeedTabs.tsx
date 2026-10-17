@@ -17,6 +17,8 @@ export const PERSONAL_LABELS: Record<PersonalTab, string> = {
 export const EXTRA_LABELS: Record<ExtraTab, string> = {
   trends: 'Trends',
   events: 'Events',
+  podcasts: 'Podcasts',
+  videos: 'Videos',
   orgs: 'Orgs',
 };
 
