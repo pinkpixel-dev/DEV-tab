@@ -5,7 +5,7 @@
 ### 🔔 Activity
 
 - New bell in the top bar when an API key is connected. It lists new comments and replies on your posts, new reactions and new followers, newest first, with a count for anything you haven't seen
-- Optional desktop notifications for the same activity, turned on under Notifications in settings. The browser asks for permission first, and DEV Tab checks every 15 minutes while they're on. Clicking a notification opens the comment, post or profile on DEV
+- Optional desktop notifications for the same activity, turned on under Notifications in settings. The browser asks for permission first, and DEV Tab checks every 5 minutes while they're on. Clicking a notification opens the comment, post or profile on DEV
 - Removing the key also clears stored activity
 
 ## 1.0.1 - October 17, 2026

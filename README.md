@@ -84,7 +84,7 @@ Everything above works without an account. If you add a DEV API key in settings,
 - **Smarter search** that finds posts by meaning, not just matching words
 - A bookmark on cards for posts already in your reading list
 - **Activity**, the bell in the top bar. It lists new comments and replies on your posts, new reactions and new followers, and shows a count for anything you haven't seen yet
-- **Desktop notifications** for that same activity, if you turn them on in settings. Your browser asks for permission first, and DEV Tab checks every 15 minutes while it's on
+- **Desktop notifications** for that same activity, if you turn them on in settings. Your browser asks for permission first, and DEV Tab checks every 5 minutes while it's on
 
 DEV's API doesn't have a notifications endpoint, so DEV Tab works out activity by comparing your posts and followers with what it saw last time. That means it can't catch replies to comments you left on other people's posts, mentions or badges. The **All notifications on DEV** link at the bottom of the bell covers those.
 

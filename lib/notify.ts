@@ -5,7 +5,7 @@ import { describe, type ActivityItem } from './activity';
 const permission = (): Browser.permissions.Permissions => ({ permissions: ['notifications'] });
 
 export const ACTIVITY_ALARM = 'activity';
-export const ACTIVITY_PERIOD_MINUTES = 15;
+export const ACTIVITY_PERIOD_MINUTES = 5;
 // More than this in one check becomes a single summary notification.
 const MAX_SEPARATE = 3;
 const SUMMARY_ID = 'activity:summary';

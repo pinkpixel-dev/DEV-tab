@@ -19,7 +19,8 @@ export default defineBackground({
       const [settings, key, allowed] = await Promise.all([getSettings(), apiKeyItem.getValue(), hasNotifyPermission()]);
       const want = settings.notify && key !== null && allowed;
       const existing = await browser.alarms.get(ACTIVITY_ALARM);
-      if (want && !existing) {
+      // A period from an older build gets replaced with the current one.
+      if (want && existing?.periodInMinutes !== ACTIVITY_PERIOD_MINUTES) {
         await browser.alarms.create(ACTIVITY_ALARM, { delayInMinutes: 1, periodInMinutes: ACTIVITY_PERIOD_MINUTES });
       } else if (!want && existing) {
         await browser.alarms.clear(ACTIVITY_ALARM);
@@ -36,7 +37,9 @@ export default defineBackground({
       // Firefox consent withdrawn: the next new tab drops the key, so just don't send it.
       if (!key || !account || !consent || !allowed) return syncAlarm();
       try {
-        await checkActivity(key, account.username);
+        // The alarm already sets the pace. Without force, a check that lands a
+        // few ms early against the 5 minute gap would be skipped.
+        await checkActivity(key, account.username, { force: true });
       } catch {
         // Offline, rate limited or a rejected key. The next alarm tries again.
         return;

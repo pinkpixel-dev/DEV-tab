@@ -148,7 +148,7 @@ export default function App() {
       </Row>
 
       {apiKey && (
-        <Row title="Notifications" hint="New comments, replies, reactions and followers, checked every 15 minutes.">
+        <Row title="Notifications" hint="New comments, replies, reactions and followers, checked every 5 minutes.">
           <NotifyToggle on={settings.notify} onChange={(notify) => save({ notify })} />
         </Row>
       )}
