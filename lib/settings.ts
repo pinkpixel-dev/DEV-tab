@@ -11,6 +11,9 @@ export interface Settings {
   hiddenTags: string[];
   // Orgs shown on the Orgs tab. DEV's API can't list the orgs you follow, so they're picked here.
   orgs: Organization[];
+  // Desktop notifications for activity on your posts. Needs a key and the
+  // optional notifications permission.
+  notify: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -19,6 +22,7 @@ export const DEFAULT_SETTINGS: Settings = {
   savedTags: ['webdev', 'javascript', 'programming', 'ai', 'beginners'],
   hiddenTags: [],
   orgs: [],
+  notify: false,
 };
 
 export const settingsItem = storage.defineItem<Settings>('local:settings', {

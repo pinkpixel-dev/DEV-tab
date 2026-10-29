@@ -70,6 +70,7 @@ Click the gear icon in the top right, or open the extension's options from your 
 | Hidden tags | Posts with any of these tags never show up |
 | Orgs | DEV organizations for the Orgs tab. Add them by username or by pasting any dev.to link |
 | DEV API key | Optional. Turns on the account features below |
+| Notifications | Desktop notifications for activity on your posts. Only shows up once a key is connected |
 
 Changes apply right away, including in tabs you already have open.
 
@@ -82,6 +83,10 @@ Everything above works without an account. If you add a DEV API key in settings,
 - **Dashboard**, opened from the grid icon next to your avatar. It shows your follower count, views, reactions, comments and new followers for the last 7, 30 or 90 days, a daily views chart, an activity heatmap you can step back through year by year, your posts and drafts with edit links, recent followers, your top supporters and where your readers came from
 - **Smarter search** that finds posts by meaning, not just matching words
 - A bookmark on cards for posts already in your reading list
+- **Activity**, the bell in the top bar. It lists new comments and replies on your posts, new reactions and new followers, and shows a count for anything you haven't seen yet
+- **Desktop notifications** for that same activity, if you turn them on in settings. Your browser asks for permission first, and DEV Tab checks every 15 minutes while it's on
+
+DEV's API doesn't have a notifications endpoint, so DEV Tab works out activity by comparing your posts and followers with what it saw last time. That means it can't catch replies to comments you left on other people's posts, mentions or badges. The **All notifications on DEV** link at the bottom of the bell covers those.
 
 You can create a key under **DEV API Keys** at [dev.to/settings/extensions](https://dev.to/settings/extensions). It stays in this browser's extension storage and only gets sent to `dev.to`. On Firefox, you'll get a prompt asking whether DEV Tab can send it.
 

@@ -12,6 +12,7 @@ import {
   TriangleAlert,
 } from 'lucide-react';
 import { UserBadge } from '@/components/account/UserBadge';
+import { ActivityBell } from '@/components/activity/ActivityBell';
 import { EventsView } from '@/components/events/EventsView';
 import { FeedGrid } from '@/components/feed/FeedGrid';
 import { MediaView } from '@/components/media/MediaView';
@@ -22,6 +23,7 @@ import { SearchBox } from '@/components/search/SearchBox';
 import { TagFilter } from '@/components/tags/TagFilter';
 import { Banner, StatusMessage } from '@/components/ui/StatusMessage';
 import { useAccount } from '@/hooks/useAccount';
+import { useActivity } from '@/hooks/useActivity';
 import { useCachedData } from '@/hooks/useCachedData';
 import { useFeed, type FeedSource } from '@/hooks/useFeed';
 import { useFollowedTags } from '@/hooks/useFollowedTags';
@@ -74,6 +76,7 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
 
   const followedTags = useFollowedTags(apiKey);
   const savedIds = useSavedIds(apiKey);
+  const activity = useActivity(apiKey, account);
   const chipTags = followedTags ?? settings.savedTags;
 
   const view = query ? 'search' : kind;
@@ -164,6 +167,16 @@ function FeedPage({ settings, apiKey, account }: FeedPageProps) {
           >
             <SettingsIcon size={16} aria-hidden="true" />
           </button>
+          {account && (
+            <ActivityBell
+              items={activity.items}
+              unread={activity.unread}
+              seenAt={activity.seenAt}
+              ready={activity.ready}
+              failed={activity.failed}
+              onClose={activity.markSeen}
+            />
+          )}
           {account && (
             <a className="btn icon-btn" href="/dashboard.html" aria-label="Dashboard" title="Dashboard">
               <LayoutDashboard size={16} aria-hidden="true" />

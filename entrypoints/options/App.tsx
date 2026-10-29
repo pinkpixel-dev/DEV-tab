@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { ArrowLeft, Check } from 'lucide-react';
 import { KeyForm } from '@/components/account/KeyForm';
+import { NotifyToggle } from '@/components/activity/NotifyToggle';
 import { EXTRA_LABELS, FEED_LABELS, PERSONAL_LABELS } from '@/components/feed/FeedTabs';
 import { OrgListEditor } from '@/components/orgs/OrgListEditor';
 import { TagListEditor } from '@/components/tags/TagListEditor';
@@ -145,6 +146,12 @@ export default function App() {
           </p>
         )}
       </Row>
+
+      {apiKey && (
+        <Row title="Notifications" hint="New comments, replies, reactions and followers, checked every 15 minutes.">
+          <NotifyToggle on={settings.notify} onChange={(notify) => save({ notify })} />
+        </Row>
+      )}
 
       <footer className="options-foot">
         {APP_NAME} {APP_VERSION} · Made with 💖 by{' '}

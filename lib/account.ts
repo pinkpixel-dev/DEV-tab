@@ -42,5 +42,5 @@ export async function connectAccount(apiKey: string): Promise<Account> {
 export async function disconnectAccount(): Promise<void> {
   const all = await browser.storage.local.get(null);
   const personal = Object.keys(all).filter((k) => k.startsWith(PERSONAL_CACHE_PREFIX));
-  await browser.storage.local.remove(['apiKey', 'account', ...personal]);
+  await browser.storage.local.remove(['apiKey', 'account', 'activity', ...personal]);
 }

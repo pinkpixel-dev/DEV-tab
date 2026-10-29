@@ -10,7 +10,10 @@ export default defineConfig({
     name: 'DEV Tab',
     description: 'Your new tab, filled with DEV (dev.to) posts. Feeds, search, reactions and comments, plus your own stats with a DEV API key.',
     homepage_url: 'https://github.com/pinkpixel-dev/DEV-tab',
-    permissions: ['storage'],
+    // `alarms` runs the activity check for desktop notifications.
+    // `notifications` is requested only when that setting is turned on.
+    permissions: ['storage', 'alarms'],
+    optional_permissions: ['notifications'],
     host_permissions: ['https://dev.to/*'],
     // Firefox needs a stable add-on id; Chrome warns about the key, so it's Firefox only.
     ...(browser === 'firefox' && {
