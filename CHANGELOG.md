@@ -1,10 +1,12 @@
 # Changelog
 
-## 1.1.0 - In progress
+## 1.1.0 - October 29, 2026
 
 ### 🔔 Activity
 
 - New bell in the top bar when an API key is connected. It lists new comments and replies on your posts, new reactions and new followers, newest first, with a count for anything you haven't seen
+- New items get a highlight and a dot, so they're easy to pick out even when several sit together
+- New reactions on the same post are grouped into one row until you've opened the bell, so a busy post doesn't fill the list
 - Optional desktop notifications for the same activity, turned on under Notifications in settings. The browser asks for permission first, and DEV Tab checks every 5 minutes while they're on. Clicking a notification opens the comment, post or profile on DEV
 - Removing the key also clears stored activity
 
