@@ -110,11 +110,11 @@
 }
 
 .activity-item:hover {
-  background: var(--surface-hover);
+  background: var(--surface-raised-hover);
 }
 
 .activity-item:active {
-  background: var(--border);
+  background: var(--surface-raised-active);
 }
 
 .activity-item:focus-visible {
@@ -128,6 +128,19 @@
 
 .activity-item[data-new]:hover {
   background: var(--accent-wash-hover);
+}
+
+/* A dot on each new row, so new rows that sit together still read as
+   separate items. Screen readers get the "New:" text instead. */
+.activity-item[data-new]::after {
+  content: '';
+  flex: none;
+  align-self: center;
+  width: 7px;
+  height: 7px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: var(--accent);
 }
 
 .activity-avatar {
