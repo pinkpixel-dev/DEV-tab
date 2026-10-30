@@ -4,6 +4,7 @@ import { accountItem, apiKeyItem, disconnectAccount } from '@/lib/account';
 import {
   activityItem,
   changedPosts,
+  combineReactions,
   describe as describeItem,
   mergeItems,
   newComments,
@@ -137,6 +138,23 @@ describe('mergeItems', () => {
     const merged = mergeItems([], fresh);
     expect(merged).toHaveLength(50);
     expect(merged[0]?.id).toBe('i59');
+  });
+});
+
+describe('combineReactions', () => {
+  it('adds a new batch to an unseen row on the same post', () => {
+    const unseen = reactionItem(post(3, 0, 12), 2, 20);
+    const other = reactionItem(post(4, 0, 5), 1, 20);
+    const { existing, fresh } = combineReactions([unseen, other], [reactionItem(post(3, 0, 15), 3, 30)], 10);
+    expect(existing).toEqual([other]);
+    expect(fresh).toMatchObject([{ id: 'reactions:3:15', count: 5, foundAt: 30 }]);
+  });
+
+  it('starts a new row once the old one has been seen', () => {
+    const seen = reactionItem(post(3, 0, 12), 2, 20);
+    const { existing, fresh } = combineReactions([seen], [reactionItem(post(3, 0, 15), 3, 30)], 25);
+    expect(existing).toEqual([seen]);
+    expect(fresh[0]?.count).toBe(3);
   });
 });
 

@@ -124,6 +124,24 @@ export function reactionItem(article: MyArticle, delta: number, foundAt: number)
   };
 }
 
+// A new batch on a post that still has an unseen reaction row takes that
+// row's place with the two counts added, so one busy post doesn't fill the
+// bell. Once the bell has been opened, the next batch starts a new row.
+export function combineReactions(existing: ActivityItem[], fresh: ActivityItem[], seenAt: number) {
+  const postOf = (i: ActivityItem) => i.id.split(':')[1];
+  const unseen = new Map(
+    existing.filter((i) => i.kind === 'reactions' && i.foundAt > seenAt).map((i) => [postOf(i), i]),
+  );
+  const replaced = new Set<string>();
+  const combined = fresh.map((i) => {
+    const prev = i.kind === 'reactions' ? unseen.get(postOf(i)) : undefined;
+    if (!prev) return i;
+    replaced.add(prev.id);
+    return { ...i, count: (i.count ?? 0) + (prev.count ?? 0) };
+  });
+  return { existing: existing.filter((i) => !replaced.has(i.id)), fresh: combined };
+}
+
 export function newFollowers(followers: Follower[], since: string, foundAt: number): ActivityItem[] {
   return followers
     .filter((f) => f.created_at > since)
@@ -206,11 +224,12 @@ export async function checkActivity(apiKey: string, username: string, { now = Da
   // into whatever is stored now instead of the copy read at the start.
   const latest = (await activityItem.getValue()) ?? prev;
   const known = new Set(latest.items.map((i) => i.id));
+  const combined = combineReactions(latest.items, fresh, latest.seenAt);
   await activityItem.setValue({
     ...latest,
     checkedAt: now,
     posts,
-    items: mergeItems(latest.items, fresh),
+    items: mergeItems(combined.existing, combined.fresh),
   });
-  return fresh.filter((i) => !known.has(i.id));
+  return combined.fresh.filter((i) => !known.has(i.id));
 }
